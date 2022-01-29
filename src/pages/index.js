@@ -10,6 +10,7 @@ import {
   isWordValid,
   lettersCount,
 } from '../utils/utils';
+import toast, { Toaster } from 'react-hot-toast';
 
 const tests = () => {
   console.log('word of the day : ', getWordOfTheDay());
@@ -54,15 +55,15 @@ const Kuan = () => {
 
   // tests();
 
-  const onKeyPress = useCallback(
-    (event) => {
-      if (event.keyCode >= 65 && event.keyCode <= 90) {
+  const handlePress = useCallback(
+    (keyCode) => {
+      if (keyCode >= 65 && keyCode <= 90) {
         if (guess.length < BOARD_STATE.length - 1) {
-          const character = String.fromCharCode(event.keyCode);
+          const character = String.fromCharCode(keyCode);
           const letters = `${guess}${character}`;
           setGuess(letters);
         }
-      } else if (event.keyCode === 8) {
+      } else if (keyCode === 8) {
         if (guess.length) {
           const letters = guess.substring(0, guess.length - 1);
           setGuess(letters);
@@ -78,14 +79,26 @@ const Kuan = () => {
             setRowIndex(gameBoard.indexOf(''));
             setEvaluations([...evaluations]);
             setGameBoard([...gameBoard]);
+          } else {
+            toast.error('Kuan... Wala sa listahan\n(Word not on the list)');
           }
         }
-      } else {
-        event.preventDefault();
       }
     },
     [evaluations, gameBoard, guess, rowIndex]
   );
+
+  const onKeyPress = useCallback(
+    (event) => {
+      handlePress(event.keyCode);
+    },
+    [handlePress]
+  );
+
+  const onPress = (keyCode) => {
+    console.log(keyCode);
+    handlePress(keyCode);
+  };
 
   useEffect(() => {
     document.addEventListener('keydown', onKeyPress);
@@ -93,21 +106,26 @@ const Kuan = () => {
     return () => document.removeEventListener('keydown', onKeyPress);
   }, [onKeyPress]);
 
+  console.log(gameBoard);
+
   return (
-    <main className="container flex flex-col justify-between mx-auto w-[500px]">
-      <Header />
-      <div className="space-y-1 py-14">
-        {gameBoard.map((word, index) => (
-          <Word
-            key={index}
-            evaluation={evaluations[index]}
-            length={BOARD_STATE.length - 1}
-            word={word || (index === rowIndex ? guess : '')}
-          />
-        ))}
-      </div>
-      <Keyboard />
-    </main>
+    <>
+      <Toaster position="top-left" />
+      <main className="container flex flex-col justify-between mx-auto md:w-[500px] md:h-screen w-screen space-y-5">
+        <Header />
+        <div className="space-y-1">
+          {gameBoard.map((word, index) => (
+            <Word
+              key={index}
+              evaluation={evaluations[index]}
+              length={BOARD_STATE.length - 1}
+              word={word || (index === rowIndex ? guess : '')}
+            />
+          ))}
+        </div>
+        <Keyboard onPress={onPress} />
+      </main>
+    </>
   );
 };
 
