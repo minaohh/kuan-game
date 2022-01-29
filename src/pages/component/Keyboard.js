@@ -19,9 +19,9 @@ const Keyboard = ({ onPress }) => {
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center space-y-1.5">
+    <div className="flex flex-col items-center justify-center md:space-y-1.5 space-y-0.5 md:pb-10">
       {keyboard.map((row, index) => (
-        <div key={index} className="flex space-x-1">
+        <div key={index} className="flex md:space-x-1 space-x-0.5">
           {row.map((key, index) => (
             <Key key={index} onPress={onPress}>
               {key}

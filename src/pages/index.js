@@ -105,21 +105,23 @@ const Kuan = () => {
   console.log(gameBoard);
 
   return (
-    <main className="container flex flex-col justify-between mx-auto w-[500px]">
+    <>
       <Toaster position="top-left" />
-      <Header />
-      <div className="space-y-1 py-14">
-        {gameBoard.map((word, index) => (
-          <Word
-            key={index}
-            evaluation={evaluations[index]}
-            length={BOARD_STATE.length - 1}
-            word={word || (index === rowIndex ? guess : '')}
-          />
-        ))}
-      </div>
-      <Keyboard onPress={onPress} />
-    </main>
+      <main className="container flex flex-col justify-between mx-auto md:w-[500px] md:h-screen w-screen space-y-5">
+        <Header />
+        <div className="space-y-1">
+          {gameBoard.map((word, index) => (
+            <Word
+              key={index}
+              evaluation={evaluations[index]}
+              length={BOARD_STATE.length - 1}
+              word={word || (index === rowIndex ? guess : '')}
+            />
+          ))}
+        </div>
+        <Keyboard onPress={onPress} />
+      </main>
+    </>
   );
 };
 
