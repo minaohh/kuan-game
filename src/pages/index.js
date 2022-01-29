@@ -3,7 +3,23 @@ import { useCallback, useEffect, useState } from 'react';
 import Header from './component/Header';
 import Keyboard from './component/Keyboard';
 import Word from './component/Word';
-import { checkWord, getWordOfTheDay, isWordValid } from '../utils/utils';
+import {
+  checkWord,
+  getWordOfTheDay,
+  isWordValid,
+  lettersCount,
+} from '../utils/utils';
+
+const tests = () => {
+  console.log('word of the day : ', getWordOfTheDay());
+
+  const guess = 'SILIP';
+  console.log('Guess: ', guess);
+  // console.log('lettersCount: ', lettersCount());
+  // console.log('is guess in dictionary? ', isWordValid(guess));
+
+  console.log('result: ', checkWord(guess));
+};
 
 const BOARD_STATE = ['', '', '', '', '', ''];
 
