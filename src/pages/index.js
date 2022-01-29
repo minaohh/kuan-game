@@ -5,6 +5,7 @@ import Keyboard from './component/Keyboard';
 import Word from './component/Word';
 import {
   checkWord,
+  getKeyboardState,
   getWordOfTheDay,
   isWordValid,
   lettersCount,
@@ -18,7 +19,9 @@ const tests = () => {
   // console.log('lettersCount: ', lettersCount());
   // console.log('is guess in dictionary? ', isWordValid(guess));
 
-  console.log('result: ', checkWord(guess));
+  let result = checkWord(guess);
+  console.log('result: ', result);
+  console.log('keyboard: ', getKeyboardState(guess, result));
 };
 
 const BOARD_STATE = ['', '', '', '', '', ''];
@@ -65,6 +68,7 @@ const Kuan = () => {
           setGuess(letters);
         }
       } else if (event.keyCode === 13) {
+        // enter
         if (guess.length === BOARD_STATE.length - 1) {
           if (isWordValid(guess)) {
             const evaluation = checkWord(guess);
