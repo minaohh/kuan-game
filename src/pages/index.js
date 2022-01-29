@@ -52,20 +52,20 @@ const Kuan = () => {
 
   // tests();
 
-  const onKeyPress = useCallback(
-    (event) => {
-      if (event.keyCode >= 65 && event.keyCode <= 90) {
+  const handlePress = useCallback(
+    (keyCode) => {
+      if (keyCode >= 65 && keyCode <= 90) {
         if (guess.length < BOARD_STATE.length - 1) {
-          const character = String.fromCharCode(event.keyCode);
+          const character = String.fromCharCode(keyCode);
           const letters = `${guess}${character}`;
           setGuess(letters);
         }
-      } else if (event.keyCode === 8) {
+      } else if (keyCode === 8) {
         if (guess.length) {
           const letters = guess.substring(0, guess.length - 1);
           setGuess(letters);
         }
-      } else if (event.keyCode === 13) {
+      } else if (keyCode === 13) {
         if (guess.length === BOARD_STATE.length - 1) {
           if (isWordValid(guess)) {
             const evaluation = checkWord(guess);
@@ -79,18 +79,30 @@ const Kuan = () => {
             toast.error('Kuan... Wala sa listahan\n(Word not on the list)');
           }
         }
-      } else {
-        event.preventDefault();
       }
     },
     [evaluations, gameBoard, guess, rowIndex]
   );
+
+  const onKeyPress = useCallback(
+    (event) => {
+      handlePress(event.keyCode);
+    },
+    [handlePress]
+  );
+
+  const onPress = (keyCode) => {
+    console.log(keyCode);
+    handlePress(keyCode);
+  };
 
   useEffect(() => {
     document.addEventListener('keydown', onKeyPress);
 
     return () => document.removeEventListener('keydown', onKeyPress);
   }, [onKeyPress]);
+
+  console.log(gameBoard);
 
   return (
     <main className="container flex flex-col justify-between mx-auto w-[500px]">
@@ -106,7 +118,7 @@ const Kuan = () => {
           />
         ))}
       </div>
-      <Keyboard />
+      <Keyboard onPress={onPress} />
     </main>
   );
 };
