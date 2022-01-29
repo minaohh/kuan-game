@@ -1,6 +1,6 @@
 import Letter from './Letter';
 
-const Word = ({ length, word }) => {
+const Word = ({ evaluation, length, word }) => {
   const characters = new Array(length);
   const letters = word.split('');
 
@@ -10,9 +10,13 @@ const Word = ({ length, word }) => {
 
   return (
     <div className="flex flex-row items-center justify-center space-x-1">
-      {characters.map((letter, index) => (
-        <Letter key={index}>{letter}</Letter>
-      ))}
+      {characters.map((letter, index) => {
+        return (
+          <Letter key={index} evaluation={evaluation?.[index]}>
+            {letter}
+          </Letter>
+        );
+      })}
     </div>
   );
 };
