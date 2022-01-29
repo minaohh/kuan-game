@@ -50,10 +50,12 @@ const Kuan = () => {
   const [evaluations, setEvaluations] = useState(new Array(BOARD_STATE.length));
   const [gameBoard, setGameBoard] = useState(BOARD_STATE);
   const [guess, setGuess] = useState('');
+  const [keyboardState, setKeyboardState] = useState(getKeyboardState());
   const [rowIndex, setRowIndex] = useState(gameBoard.indexOf(''));
   const [stats, setStats] = useState(STATISTICS);
 
   // tests();
+  // console.log(gameBoard);
 
   const handlePress = useCallback(
     (keyCode) => {
@@ -68,13 +70,19 @@ const Kuan = () => {
           const letters = guess.substring(0, guess.length - 1);
           setGuess(letters);
         }
-      } else if (event.keyCode === 13) {
+      } else if (keyCode === 13) {
         // enter
         if (guess.length === BOARD_STATE.length - 1) {
           if (isWordValid(guess)) {
             const evaluation = checkWord(guess);
             evaluations[rowIndex] = evaluation;
             gameBoard[rowIndex] = guess;
+            const keyboardState = getKeyboardState(
+              guess,
+              evaluation,
+              keyboardState
+            );
+            setKeyboardState(keyboardState);
             setGuess('');
             setRowIndex(gameBoard.indexOf(''));
             setEvaluations([...evaluations]);
@@ -106,8 +114,6 @@ const Kuan = () => {
     return () => document.removeEventListener('keydown', onKeyPress);
   }, [onKeyPress]);
 
-  console.log(gameBoard);
-
   return (
     <>
       <Toaster position="top-left" />
@@ -123,7 +129,7 @@ const Kuan = () => {
             />
           ))}
         </div>
-        <Keyboard onPress={onPress} />
+        <Keyboard onPress={onPress} state={keyboardState} />
       </main>
     </>
   );
