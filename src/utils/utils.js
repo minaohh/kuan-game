@@ -16,12 +16,14 @@ export const getWordOfTheDay = (mode = GAME_MODE) => {
 // Check if the word is in the dictionary
 // Returns true if valid, false otherwise
 export const isWordValid = (guess, mode = GAME_MODE) => {
+  guess = guess.toLowerCase();
   return db[mode.language][mode.length].includes(guess);
 };
 
 // Checks if the user's guess is correct
 // Returns an array: absent - grey, present - yellow, correct - green
 export const checkWord = (word, mode = GAME_MODE) => {
+  word = word.toLowerCase();
   const ans = getWordOfTheDay(mode).split('');
   const guess = word.split('');
   let res = [mode.length];

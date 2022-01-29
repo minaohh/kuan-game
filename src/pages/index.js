@@ -10,7 +10,7 @@ import * as utils from '../utils/utils';
 const tests = () => {
   console.log('word of the day : ', utils.getWordOfTheDay());
 
-  const guess = 'silip';
+  const guess = 'HIGUP';
   console.log('Guess: ', guess);
   console.log('is guess in dictionary? ', utils.isWordValid(guess));
 
