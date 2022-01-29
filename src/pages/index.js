@@ -5,8 +5,21 @@ import {
 } from '@heroicons/react/outline';
 import Keyboard from './component/Keyboard';
 import Word from './component/Word';
+import * as utils from '../utils/utils';
+
+const tests = () => {
+  console.log('word of the day : ', utils.getWordOfTheDay());
+
+  const guess = 'silip';
+  console.log('Guess: ', guess);
+  console.log('is guess in dictionary? ', utils.isWordValid(guess));
+
+  console.log('result: ', utils.checkWord(guess));
+};
 
 const Kuan = () => {
+  tests();
+
   return (
     <main className="container flex flex-col justify-between mx-auto w-[500px]">
       <header className="flex items-center justify-between p-5 border-b">
