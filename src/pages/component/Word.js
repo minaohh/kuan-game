@@ -1,15 +1,18 @@
 import Letter from './Letter';
 
-const Word = ({ word }) => {
+const Word = ({ length, word }) => {
+  const characters = new Array(length);
   const letters = word.split('');
+
+  for (let i = 0; i < length; i++) {
+    characters[i] = letters[i] || '';
+  }
 
   return (
     <div className="flex flex-row items-center justify-center space-x-1">
-      <Letter>{letters[0]}</Letter>
-      <Letter>{letters[1]}</Letter>
-      <Letter>{letters[2]}</Letter>
-      <Letter>{letters[3]}</Letter>
-      <Letter>{letters[4]}</Letter>
+      {characters.map((letter, index) => (
+        <Letter key={index}>{letter}</Letter>
+      ))}
     </div>
   );
 };
