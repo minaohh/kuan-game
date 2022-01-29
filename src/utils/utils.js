@@ -7,6 +7,64 @@ export const GAME_MODE = {
   length: 5,
 };
 
+const letterCountInit = {
+  a: 0,
+  b: 0,
+  c: 0,
+  d: 0,
+  e: 0,
+  f: 0,
+  g: 0,
+  h: 0,
+  i: 0,
+  j: 0,
+  k: 0,
+  l: 0,
+  m: 0,
+  n: 0,
+  o: 0,
+  p: 0,
+  q: 0,
+  r: 0,
+  s: 0,
+  t: 0,
+  u: 0,
+  v: 0,
+  w: 0,
+  x: 0,
+  y: 0,
+  z: 0,
+};
+
+const keyboardStateInit = {
+  a: 'none',
+  b: 'none',
+  c: 'none',
+  d: 'none',
+  e: 'none',
+  f: 'none',
+  g: 'none',
+  h: 'none',
+  i: 'none',
+  j: 'none',
+  k: 'none',
+  l: 'none',
+  m: 'none',
+  n: 'none',
+  o: 'none',
+  p: 'none',
+  q: 'none',
+  r: 'none',
+  s: 'none',
+  t: 'none',
+  u: 'none',
+  v: 'none',
+  w: 'none',
+  x: 'none',
+  y: 'none',
+  z: 'none',
+};
+
 // Returns the word of the day in the chosen language (string)
 export const getWordOfTheDay = (mode = GAME_MODE) => {
   let today = formatDate(new Date());
@@ -39,44 +97,36 @@ export const checkWord = (word, mode = GAME_MODE) => {
     } else {
       code = 'absent';
     }
-    console.log(letters);
+
     res.push(code);
   }
 
   return res;
 };
 
+// guess: string, guessResult: []
+// Returns an object of letters containing the key state: (none, abs, pres, cor)
+export const getKeyboardState = (
+  guess,
+  guessResult,
+  keyboard = keyboardStateInit,
+  mode = GAME_MODE
+) => {
+  let guessArr = guess.toLowerCase().split('');
+
+  guessArr.forEach((g, idx) => {
+    if (keyboard[g] === 'none') {
+      keyboard[g] = guessResult[idx];
+    }
+  });
+
+  return keyboard;
+};
+
 // Returns an object with the occurrences of each letter
-export const lettersCount = (mode = GAME_MODE) => {
-  let letters = {
-    a: 0,
-    b: 0,
-    c: 0,
-    d: 0,
-    e: 0,
-    f: 0,
-    g: 0,
-    h: 0,
-    i: 0,
-    j: 0,
-    k: 0,
-    l: 0,
-    m: 0,
-    n: 0,
-    o: 0,
-    p: 0,
-    q: 0,
-    r: 0,
-    s: 0,
-    t: 0,
-    u: 0,
-    v: 0,
-    w: 0,
-    x: 0,
-    y: 0,
-    z: 0,
-  };
-  let word = getWordOfTheDay();
+export const lettersCount = (word = getWordOfTheDay(), mode = GAME_MODE) => {
+  let letters = letterCountInit;
+  // let word = getWordOfTheDay();
 
   [...word].forEach((c) => {
     letters[c]++;
