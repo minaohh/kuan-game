@@ -5,16 +5,6 @@ import Keyboard from './component/Keyboard';
 import Word from './component/Word';
 import { checkWord, getWordOfTheDay, isWordValid } from '../utils/utils';
 
-// const tests = () => {
-//   console.log('word of the day : ', getWordOfTheDay());
-
-//   const guess = 'SILIP';
-//   console.log('Guess: ', guess);
-//   console.log('is guess in dictionary? ', isWordValid(guess));
-
-//   console.log('result: ', checkWord(guess));
-// };
-
 const BOARD_STATE = ['', '', '', '', '', ''];
 
 const STATISTICS = {
@@ -34,15 +24,14 @@ const STATISTICS = {
   winPercentage: 0,
 };
 
+const WORD_OF_THE_DAY = getWordOfTheDay();
+
 const Kuan = () => {
   const [evaluations, setEvaluations] = useState(new Array(BOARD_STATE.length));
   const [gameBoard, setGameBoard] = useState(BOARD_STATE);
   const [guess, setGuess] = useState('');
   const [rowIndex, setRowIndex] = useState(gameBoard.indexOf(''));
   const [stats, setStats] = useState(STATISTICS);
-  const [wordOfTheDay] = useState(getWordOfTheDay());
-
-  // tests();
 
   const onKeyPress = useCallback(
     (event) => {
@@ -61,14 +50,16 @@ const Kuan = () => {
         if (guess.length === BOARD_STATE.length - 1) {
           if (isWordValid(guess)) {
             const evaluation = checkWord(guess);
-            console.log(evaluation);
             evaluations[rowIndex] = evaluation;
             gameBoard[rowIndex] = guess;
             setGuess('');
             setRowIndex(gameBoard.indexOf(''));
             setEvaluations([...evaluations]);
+            setGameBoard([...gameBoard]);
           }
         }
+      } else {
+        event.preventDefault();
       }
     },
     [evaluations, gameBoard, guess, rowIndex]
@@ -77,9 +68,7 @@ const Kuan = () => {
   useEffect(() => {
     document.addEventListener('keydown', onKeyPress);
 
-    return () => {
-      document.removeEventListener('keydown', onKeyPress);
-    };
+    return () => document.removeEventListener('keydown', onKeyPress);
   }, [onKeyPress]);
 
   return (
