@@ -9,6 +9,7 @@ import {
   isWordValid,
   lettersCount,
 } from '../utils/utils';
+import toast, { Toaster } from 'react-hot-toast';
 
 const tests = () => {
   console.log('word of the day : ', getWordOfTheDay());
@@ -72,6 +73,8 @@ const Kuan = () => {
             setRowIndex(gameBoard.indexOf(''));
             setEvaluations([...evaluations]);
             setGameBoard([...gameBoard]);
+          } else {
+            toast.error('Kuan... Wala sa listahan\n(Word not on the list)');
           }
         }
       } else {
@@ -89,6 +92,7 @@ const Kuan = () => {
 
   return (
     <main className="container flex flex-col justify-between mx-auto w-[500px]">
+      <Toaster position="top-left" />
       <Header />
       <div className="space-y-1 py-14">
         {gameBoard.map((word, index) => (
