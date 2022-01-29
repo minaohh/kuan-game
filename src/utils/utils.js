@@ -26,7 +26,7 @@ export const checkWord = (word, mode = GAME_MODE) => {
   word = word.toLowerCase();
   const ans = getWordOfTheDay(mode).split('');
   const guess = word.split('');
-  let res = [mode.length];
+  let res = [];
   let code = '';
 
   for (let i = 0; i < guess.length; i++) {

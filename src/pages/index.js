@@ -42,6 +42,8 @@ const Kuan = () => {
   const [stats, setStats] = useState(STATISTICS);
   const [wordOfTheDay] = useState(getWordOfTheDay());
 
+  tests();
+
   const onKeyPress = useCallback(
     (event) => {
       if (event.keyCode >= 65 && event.keyCode <= 90) {
@@ -80,7 +82,6 @@ const Kuan = () => {
   }, [onKeyPress]);
 
   console.log(evaluations);
-  tests();
 
   return (
     <main className="container flex flex-col justify-between mx-auto w-[500px]">
