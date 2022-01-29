@@ -48,7 +48,7 @@ const Kuan = () => {
   const [stats, setStats] = useState(STATISTICS);
   const [wordOfTheDay] = useState(getWordOfTheDay());
 
-  tests();
+  // tests();
 
   const onKeyPress = useCallback(
     (event) => {
@@ -88,8 +88,6 @@ const Kuan = () => {
     };
   }, [onKeyPress]);
 
-  console.log(evaluations);
-
   return (
     <main className="container flex flex-col justify-between mx-auto w-[500px]">
       <Header />
@@ -97,6 +95,7 @@ const Kuan = () => {
         {gameBoard.map((word, index) => (
           <Word
             key={index}
+            evaluation={evaluations[index]}
             length={BOARD_STATE.length - 1}
             word={word || (index === rowIndex ? guess : '')}
           />
