@@ -13,7 +13,7 @@ import {
 const tests = () => {
   console.log('word of the day : ', getWordOfTheDay());
 
-  const guess = 'SILIP';
+  const guess = 'LIHOK'; // wod: hilom, guess: lihok, nipis
   console.log('Guess: ', guess);
   // console.log('lettersCount: ', lettersCount());
   // console.log('is guess in dictionary? ', isWordValid(guess));
@@ -48,6 +48,8 @@ const Kuan = () => {
   const [guess, setGuess] = useState('');
   const [rowIndex, setRowIndex] = useState(gameBoard.indexOf(''));
   const [stats, setStats] = useState(STATISTICS);
+
+  // tests();
 
   const onKeyPress = useCallback(
     (event) => {
