@@ -5,6 +5,16 @@ import Keyboard from './component/Keyboard';
 import Word from './component/Word';
 import { checkWord, getWordOfTheDay, isWordValid } from '../utils/utils';
 
+const tests = () => {
+  console.log('word of the day : ', getWordOfTheDay());
+
+  const guess = 'SILIP';
+  console.log('Guess: ', guess);
+  console.log('is guess in dictionary? ', isWordValid(guess));
+
+  console.log('result: ', checkWord(guess));
+};
+
 const BOARD_STATE = ['', '', '', '', '', ''];
 
 const STATISTICS = {
@@ -68,6 +78,9 @@ const Kuan = () => {
       document.removeEventListener('keydown', onKeyPress);
     };
   }, [onKeyPress]);
+
+  console.log(evaluations);
+  tests();
 
   return (
     <main className="container flex flex-col justify-between mx-auto w-[500px]">
