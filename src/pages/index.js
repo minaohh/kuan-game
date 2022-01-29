@@ -5,15 +5,15 @@ import Keyboard from './component/Keyboard';
 import Word from './component/Word';
 import { checkWord, getWordOfTheDay, isWordValid } from '../utils/utils';
 
-const tests = () => {
-  console.log('word of the day : ', getWordOfTheDay());
+// const tests = () => {
+//   console.log('word of the day : ', getWordOfTheDay());
 
-  const guess = 'SILIP';
-  console.log('Guess: ', guess);
-  console.log('is guess in dictionary? ', isWordValid(guess));
+//   const guess = 'SILIP';
+//   console.log('Guess: ', guess);
+//   console.log('is guess in dictionary? ', isWordValid(guess));
 
-  console.log('result: ', checkWord(guess));
-};
+//   console.log('result: ', checkWord(guess));
+// };
 
 const BOARD_STATE = ['', '', '', '', '', ''];
 
@@ -59,11 +59,12 @@ const Kuan = () => {
         if (guess.length === BOARD_STATE.length - 1) {
           if (isWordValid(guess)) {
             const evaluation = checkWord(guess);
-            evaluations.push(evaluation);
+            console.log(evaluation);
+            evaluations[rowIndex] = evaluation;
             gameBoard[rowIndex] = guess;
             setGuess('');
             setRowIndex(gameBoard.indexOf(''));
-            setEvaluations([...evaluation]);
+            setEvaluations([...evaluations]);
           }
         }
       }
@@ -80,7 +81,7 @@ const Kuan = () => {
   }, [onKeyPress]);
 
   console.log(evaluations);
-  tests();
+  // tests();
 
   return (
     <main className="container flex flex-col justify-between mx-auto w-[500px]">
