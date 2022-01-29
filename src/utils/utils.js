@@ -31,15 +31,15 @@ export const checkWord = (word, mode = GAME_MODE) => {
   let letters = lettersCount();
 
   for (let i = 0; i < guess.length; i++) {
-    if (guess[i] === ans[i]) {
+    if (guess[i] === ans[i] && letters[guess[i]] > 0) {
       code = 'correct';
-      letters[i]--;
-    } else if (ans.includes(guess[i]) && letters[i] > 0) {
+      letters[guess[i]]--;
+    } else if (ans.includes(guess[i]) && letters[guess[i]] > 0) {
       code = 'present';
     } else {
       code = 'absent';
     }
-
+    console.log(letters);
     res.push(code);
   }
 
