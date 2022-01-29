@@ -3,17 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Header from './component/Header';
 import Keyboard from './component/Keyboard';
 import Word from './component/Word';
-import * as utils from '../utils/utils';
-
-const tests = () => {
-  console.log('word of the day : ', utils.getWordOfTheDay());
-
-  const guess = 'silip';
-  console.log('Guess: ', guess);
-  console.log('is guess in dictionary? ', utils.isWordValid(guess));
-
-  console.log('result: ', utils.checkWord(guess));
-};
+import { checkWord, getWordOfTheDay, isWordValid } from '../utils/utils';
 
 const BOARD_STATE = ['', '', '', '', '', ''];
 
@@ -35,10 +25,12 @@ const STATISTICS = {
 };
 
 const Kuan = () => {
+  const [evaluations, setEvaluations] = useState(new Array(BOARD_STATE.length));
   const [gameBoard, setGameBoard] = useState(BOARD_STATE);
   const [guess, setGuess] = useState('');
   const [rowIndex, setRowIndex] = useState(gameBoard.indexOf(''));
   const [stats, setStats] = useState(STATISTICS);
+  const [wordOfTheDay] = useState(getWordOfTheDay());
 
   const onKeyPress = useCallback(
     (event) => {
@@ -55,13 +47,18 @@ const Kuan = () => {
         }
       } else if (event.keyCode === 13) {
         if (guess.length === BOARD_STATE.length - 1) {
-          gameBoard[rowIndex] = guess;
-          setGuess('');
-          setRowIndex(gameBoard.indexOf(''));
+          if (isWordValid(guess)) {
+            const evaluation = checkWord(guess);
+            evaluations.push(evaluation);
+            gameBoard[rowIndex] = guess;
+            setGuess('');
+            setRowIndex(gameBoard.indexOf(''));
+            setEvaluations([...evaluation]);
+          }
         }
       }
     },
-    [gameBoard, guess, rowIndex]
+    [evaluations, gameBoard, guess, rowIndex]
   );
 
   useEffect(() => {
