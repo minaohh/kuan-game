@@ -44,10 +44,13 @@ const Kuan = () => {
         }
       } else if (event.keyCode === 13) {
         if (guess.length === BOARD_STATE.length - 1) {
+          gameBoard[rowIndex] = guess;
+          setGuess('');
+          setRowIndex(gameBoard.indexOf(''));
         }
       }
     },
-    [guess]
+    [gameBoard, guess, rowIndex]
   );
 
   useEffect(() => {
