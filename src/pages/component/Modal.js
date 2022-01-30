@@ -5,7 +5,7 @@ const Modal = ({ children, show, title, toggle }) => {
   return (
     <Transition appear as={Fragment} show={show}>
       <Dialog
-        className="fixed inset-0 z-20 overflow-y-auto text-gray-800"
+        className="fixed inset-0 z-20 overflow-y-auto text-gray-800 dark:text-gray-200"
         onClose={toggle}
       >
         <div className="h-screen px-5 text-center">
@@ -35,7 +35,7 @@ const Modal = ({ children, show, title, toggle }) => {
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <div className="inline-block p-10 my-10 space-y-5 overflow-hidden text-left align-middle transition-all transform bg-white rounded shadow-xl">
+            <div className="relative inline-block p-10 my-10 space-y-5 overflow-hidden text-left align-middle transition-all transform bg-white rounded shadow-xl dark:bg-gray-800">
               <Dialog.Title as="h2" className="text-2xl font-bold leading-5">
                 {title}
               </Dialog.Title>
