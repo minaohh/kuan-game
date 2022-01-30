@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   ChartBarIcon,
   CogIcon,
@@ -7,23 +6,22 @@ import {
 import Modal from './Modal';
 import Word from './Word';
 
-const Header = () => {
-  const [showSettingsModal, setSettingsModalState] = useState(false);
-  const [showHowModal, setHowModalState] = useState(false);
-  const [showStatsModal, setStatsModalState] = useState(false);
-
-  const toggleSettingsModal = () => setSettingsModalState(!showSettingsModal);
-  const toggleHowModal = () => setHowModalState(!showHowModal);
-  const toggleStatsModal = () => setStatsModalState(!showStatsModal);
-
+const Header = ({
+  showHowModal,
+  showStatsModal,
+  showSettingsModal,
+  toggleHowModal,
+  toggleSettingsModal,
+  toggleStatsModal,
+}) => {
   return (
     <header className="flex items-center justify-between p-1 border-b">
       <button onClick={toggleHowModal}>
         <QuestionMarkCircleIcon className="w-6 h-6" />
       </button>
-      <h1 className="pl-12 text-4xl leading-8 flex flex-col items-center justify-center">
+      <h1 className="flex flex-col items-center justify-center pl-12 text-4xl leading-8">
         <span className="font-extrabold">KUAN</span>
-        <span className="text-center text-sm font-light ">
+        <span className="text-sm font-light text-center ">
           A Bisaya clone of{' '}
           <a
             href="https://www.powerlanguage.co.uk/wordle/"
@@ -49,7 +47,7 @@ const Header = () => {
           <span className="">
             Guess the <span className="font-extrabold">KUAN</span> in 6 tries.
           </span>
-          <span className="mb-2 font-extralight italic text-sm">
+          <span className="mb-2 text-sm italic font-extralight">
             Tagnaa ang <span className="font-normal">KUAN</span> sa 6 ka
             pagsulay.
           </span>
@@ -57,21 +55,20 @@ const Header = () => {
             Each guess must be a valid 5-letter word. Hit the enter button to
             submit.
           </span>
-          <span className="mb-2 font-extralight italic text-sm">
+          <span className="mb-2 text-sm italic font-extralight">
             Kada tagna, dapat 5 ka letra ang pulong. I-enter dayun pag human.
           </span>
           <span className="">
             After each guess, the color of the tiles will change to show how
             close your guess was to the word.
           </span>
-          <span className="mb-2 font-extralight italic text-sm">
+          <span className="mb-2 text-sm italic font-extralight">
             Paghuman ug tagna, mubag-o ang kolor sa tiles para mapakita kung
             unsa kaduol ang imong tagna sa KUAN.
           </span>
         </p>
         <hr />
-
-        <div className="flex flex-col space-y-4 items-start">
+        <div className="flex flex-col items-start space-y-4">
           <span className="font-bold">Examples</span>
           <Word
             evaluation={['correct', 'none', 'none', 'none', 'none']}
@@ -83,7 +80,7 @@ const Header = () => {
               The letter <span className="font-bold">N</span> is in the word and
               in the correct spot.
             </span>
-            <span className="font-extralight italic text-sm">
+            <span className="text-sm italic font-extralight">
               Naa ang letrang <span className="font-normal">N</span> sa word ug
               sakto ang plastar
             </span>
@@ -98,7 +95,7 @@ const Header = () => {
               The letter <span className="font-bold">A</span> is in the word but
               in the wrong spot.
             </span>
-            <span className="font-extralight italic text-sm">
+            <span className="text-sm italic font-extralight">
               Naa ang letrang <span className="font-normal">N</span> sa word
               pero dili insakto ang plastar
             </span>
@@ -113,7 +110,7 @@ const Header = () => {
               The letter <span className="font-bold">L</span> is not in the word
               in any spot.
             </span>
-            <span className="font-extralight italic text-sm">
+            <span className="text-sm italic font-extralight">
               Wala ang letrang <span className="font-normal">N</span> sa word
             </span>
           </span>

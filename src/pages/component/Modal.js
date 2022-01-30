@@ -36,7 +36,10 @@ const Modal = ({ children, show, title, toggle }) => {
             leaveTo="opacity-0 scale-95"
           >
             <div className="inline-block p-10 my-10 space-y-5 overflow-hidden text-left align-middle transition-all transform bg-white rounded shadow-xl">
-              <Dialog.Title as="h2" className="text-2xl font-bold leading-5">
+              <Dialog.Title
+                as="h2"
+                className="text-2xl font-bold leading-5 text-center"
+              >
                 {title}
               </Dialog.Title>
               {children}

@@ -54,7 +54,17 @@ const Kuan = () => {
   const [guess, setGuess] = useState('');
   const [keyboardState, setKeyboardState] = useState(getKeyboardState());
   const [rowIndex, setRowIndex] = useState(gameBoard.indexOf(''));
+  const [showSettingsModal, setSettingsModalState] = useState(false);
+  const [showHowModal, setHowModalState] = useState(false);
+  const [showStatsModal, setStatsModalState] = useState(false);
   const [stats, setStats] = useState(STATISTICS);
+
+  const toggleHowModal = () => setHowModalState(!showHowModal);
+  const toggleSettingsModal = () => setSettingsModalState(!showSettingsModal);
+  const toggleStatsModal = useCallback(
+    () => setStatsModalState(!showStatsModal),
+    [showStatsModal]
+  );
 
   // tests();
   // console.log(gameBoard);
@@ -98,24 +108,34 @@ const Kuan = () => {
             setEvaluations([...evaluations]);
             setGameBoard([...gameBoard]);
             setGameState(checkGameState());
+
+            if (checkGameState() !== GAME_STATUS.IN_PROGRESS) {
+              toggleStatsModal();
+            }
           } else {
             toast.error('Kuan... Wala sa listahan\n(Word not on the list)');
           }
         }
       }
     },
-    [checkGameState, evaluations, gameBoard, guess, rowIndex]
+    [checkGameState, evaluations, gameBoard, guess, rowIndex, toggleStatsModal]
   );
 
   const onKeyPress = useCallback(
     (event) => {
-      handlePress(event.keyCode);
+      if (
+        gameState === GAME_STATUS.IN_PROGRESS &&
+        !showHowModal &&
+        !showSettingsModal &&
+        !showStatsModal
+      ) {
+        handlePress(event.keyCode);
+      }
     },
-    [handlePress]
+    [gameState, handlePress, showHowModal, showSettingsModal, showStatsModal]
   );
 
   const onPress = (keyCode) => {
-    console.log(keyCode);
     handlePress(keyCode);
   };
 
@@ -129,7 +149,14 @@ const Kuan = () => {
     <>
       <Toaster position="top-left" />
       <main className="container flex flex-col justify-between mx-auto md:w-[500px] md:h-screen w-screen space-y-5">
-        <Header />
+        <Header
+          showHowModal={showHowModal}
+          showSettingsModal={showSettingsModal}
+          showStatsModal={showStatsModal}
+          toggleHowModal={toggleHowModal}
+          toggleSettingsModal={toggleSettingsModal}
+          toggleStatsModal={toggleStatsModal}
+        />
         <div className="space-y-1">
           {gameBoard.map((word, index) => (
             <Word
@@ -141,7 +168,12 @@ const Kuan = () => {
           ))}
         </div>
         <Keyboard
-          disabled={gameState !== GAME_STATUS.IN_PROGRESS}
+          disabled={
+            gameState !== GAME_STATUS.IN_PROGRESS ||
+            showHowModal ||
+            showSettingsModal ||
+            showStatsModal
+          }
           onPress={onPress}
           state={keyboardState}
         />
