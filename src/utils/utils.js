@@ -112,13 +112,15 @@ export const getKeyboardState = (
   keyboard = keyboardStateInit,
   mode = GAME_MODE
 ) => {
-  let guessArr = guess.toLowerCase().split('');
+  if (guess && guessResult) {
+    let guessArr = guess.toLowerCase().split('');
 
-  guessArr.forEach((g, idx) => {
-    if (keyboard[g] === 'none') {
-      keyboard[g] = guessResult[idx];
-    }
-  });
+    guessArr.forEach((g, idx) => {
+      if (keyboard[g] === 'none') {
+        keyboard[g] = guessResult[idx];
+      }
+    });
+  }
 
   return keyboard;
 };

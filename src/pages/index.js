@@ -10,6 +10,7 @@ import {
   isWordValid,
   lettersCount,
 } from '../utils/utils';
+import { GAME_STATUS } from '../utils/constants';
 import toast, { Toaster } from 'react-hot-toast';
 
 const tests = () => {
@@ -49,11 +50,22 @@ const WORD_OF_THE_DAY = getWordOfTheDay();
 const Kuan = () => {
   const [evaluations, setEvaluations] = useState(new Array(BOARD_STATE.length));
   const [gameBoard, setGameBoard] = useState(BOARD_STATE);
+  const [gameState, setGameState] = useState(GAME_STATUS.IN_PROGRESS);
   const [guess, setGuess] = useState('');
+  const [keyboardState, setKeyboardState] = useState(getKeyboardState());
   const [rowIndex, setRowIndex] = useState(gameBoard.indexOf(''));
   const [stats, setStats] = useState(STATISTICS);
 
   // tests();
+  // console.log(gameBoard);
+
+  const checkGameState = useCallback(() => {
+    return guess.toLowerCase() === WORD_OF_THE_DAY.toLowerCase()
+      ? GAME_STATUS.WIN
+      : rowIndex < BOARD_STATE.length
+      ? GAME_STATUS.IN_PROGRESS
+      : GAME_STATUS.LOSE;
+  }, [guess, rowIndex]);
 
   const handlePress = useCallback(
     (keyCode) => {
@@ -68,24 +80,31 @@ const Kuan = () => {
           const letters = guess.substring(0, guess.length - 1);
           setGuess(letters);
         }
-      } else if (event.keyCode === 13) {
+      } else if (keyCode === 13) {
         // enter
         if (guess.length === BOARD_STATE.length - 1) {
           if (isWordValid(guess)) {
             const evaluation = checkWord(guess);
             evaluations[rowIndex] = evaluation;
             gameBoard[rowIndex] = guess;
+            const keyboardState = getKeyboardState(
+              guess,
+              evaluation,
+              keyboardState
+            );
+            setKeyboardState(keyboardState);
             setGuess('');
             setRowIndex(gameBoard.indexOf(''));
             setEvaluations([...evaluations]);
             setGameBoard([...gameBoard]);
+            setGameState(checkGameState());
           } else {
             toast.error('Kuan... Wala sa listahan\n(Word not on the list)');
           }
         }
       }
     },
-    [evaluations, gameBoard, guess, rowIndex]
+    [checkGameState, evaluations, gameBoard, guess, rowIndex]
   );
 
   const onKeyPress = useCallback(
@@ -106,7 +125,7 @@ const Kuan = () => {
     return () => document.removeEventListener('keydown', onKeyPress);
   }, [onKeyPress]);
 
-  console.log(gameBoard);
+  console.log(gameState);
 
   return (
     <>
@@ -123,7 +142,11 @@ const Kuan = () => {
             />
           ))}
         </div>
-        <Keyboard onPress={onPress} />
+        <Keyboard
+          disabled={gameState !== GAME_STATUS.IN_PROGRESS}
+          onPress={onPress}
+          state={keyboardState}
+        />
       </main>
     </>
   );
