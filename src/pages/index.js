@@ -10,6 +10,7 @@ import {
   isWordValid,
   lettersCount,
 } from '../utils/utils';
+import { GAME_STATUS } from '../utils/constants';
 import toast, { Toaster } from 'react-hot-toast';
 
 const tests = () => {
@@ -49,6 +50,7 @@ const WORD_OF_THE_DAY = getWordOfTheDay();
 const Kuan = () => {
   const [evaluations, setEvaluations] = useState(new Array(BOARD_STATE.length));
   const [gameBoard, setGameBoard] = useState(BOARD_STATE);
+  const [gameState, setGameState] = useState(GAME_STATUS.IN_PROGRESS);
   const [guess, setGuess] = useState('');
   const [keyboardState, setKeyboardState] = useState(getKeyboardState());
   const [rowIndex, setRowIndex] = useState(gameBoard.indexOf(''));
@@ -56,6 +58,14 @@ const Kuan = () => {
 
   // tests();
   // console.log(gameBoard);
+
+  const checkGameState = useCallback(() => {
+    return guess.toLowerCase() === WORD_OF_THE_DAY.toLowerCase()
+      ? GAME_STATUS.WIN
+      : rowIndex < BOARD_STATE.length
+      ? GAME_STATUS.IN_PROGRESS
+      : GAME_STATUS.LOSE;
+  }, [guess, rowIndex]);
 
   const handlePress = useCallback(
     (keyCode) => {
@@ -87,13 +97,14 @@ const Kuan = () => {
             setRowIndex(gameBoard.indexOf(''));
             setEvaluations([...evaluations]);
             setGameBoard([...gameBoard]);
+            setGameState(checkGameState());
           } else {
             toast.error('Kuan... Wala sa listahan\n(Word not on the list)');
           }
         }
       }
     },
-    [evaluations, gameBoard, guess, rowIndex]
+    [checkGameState, evaluations, gameBoard, guess, rowIndex]
   );
 
   const onKeyPress = useCallback(
@@ -114,6 +125,8 @@ const Kuan = () => {
     return () => document.removeEventListener('keydown', onKeyPress);
   }, [onKeyPress]);
 
+  console.log(gameState);
+
   return (
     <>
       <Toaster position="top-left" />
@@ -129,7 +142,11 @@ const Kuan = () => {
             />
           ))}
         </div>
-        <Keyboard onPress={onPress} state={keyboardState} />
+        <Keyboard
+          disabled={gameState !== GAME_STATUS.IN_PROGRESS}
+          onPress={onPress}
+          state={keyboardState}
+        />
       </main>
     </>
   );
