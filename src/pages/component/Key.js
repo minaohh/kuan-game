@@ -1,4 +1,4 @@
-const Key = ({ children, onPress, state }) => {
+const Key = ({ children, disabled, onPress, state }) => {
   const onKeyPress = () => {
     const type = typeof children;
 
@@ -21,6 +21,7 @@ const Key = ({ children, onPress, state }) => {
         state === 'absent' && 'bg-gray-600 border-gray-600',
         state === 'correct' && 'bg-green-600 border-green-600',
       ].join(' ')}
+      disabled={disabled}
       onClick={onKeyPress}
     >
       {children}

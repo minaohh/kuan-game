@@ -1,7 +1,7 @@
 import { ArrowNarrowLeftIcon } from '@heroicons/react/outline';
 import Key from './Key';
 
-const Keyboard = ({ onPress, state }) => {
+const Keyboard = ({ disabled, onPress, state }) => {
   const keyboard = [
     ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
     ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
@@ -24,7 +24,12 @@ const Keyboard = ({ onPress, state }) => {
         <div key={index} className="flex md:space-x-1 space-x-0.5">
           {row.map((key, index) => {
             return (
-              <Key key={index} onPress={onPress} state={state[key]}>
+              <Key
+                key={index}
+                disabled={disabled}
+                onPress={onPress}
+                state={state[key]}
+              >
                 {key}
               </Key>
             );

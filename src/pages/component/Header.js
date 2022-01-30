@@ -6,15 +6,14 @@ import {
 } from '@heroicons/react/outline';
 import Modal from './Modal';
 
-const Header = () => {
-  const [showSettingsModal, setSettingsModalState] = useState(false);
-  const [showHowModal, setHowModalState] = useState(false);
-  const [showStatsModal, setStatsModalState] = useState(false);
-
-  const toggleSettingsModal = () => setSettingsModalState(!showSettingsModal);
-  const toggleHowModal = () => setHowModalState(!showHowModal);
-  const toggleStatsModal = () => setStatsModalState(!showStatsModal);
-
+const Header = ({
+  showHowModal,
+  showStatsModal,
+  showSettingsModal,
+  toggleHowModal,
+  toggleSettingsModal,
+  toggleStatsModal,
+}) => {
   return (
     <header className="flex items-center justify-between p-5 border-b">
       <button onClick={toggleHowModal}>
