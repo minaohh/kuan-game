@@ -1,4 +1,4 @@
-const Key = ({ children, onPress }) => {
+const Key = ({ children, onPress, state }) => {
   const onKeyPress = () => {
     const type = typeof children;
 
@@ -15,7 +15,12 @@ const Key = ({ children, onPress }) => {
 
   return (
     <button
-      className="text-lg font-bold uppercase bg-gray-200 md:min-w-[45px] md:h-[55px] h-16 min-w-8 rounded md:px-3 px-2.5"
+      className={[
+        'text-lg font-bold uppercase bg-gray-200 md:min-w-[45px] md:h-[55px] h-16 min-w-8 rounded md:px-3 px-2.5',
+        state === 'present' && 'bg-yellow-600 border-yellow-600',
+        state === 'absent' && 'bg-gray-600 border-gray-600',
+        state === 'correct' && 'bg-green-600 border-green-600',
+      ].join(' ')}
       onClick={onKeyPress}
     >
       {children}
