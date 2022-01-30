@@ -125,8 +125,6 @@ const Kuan = () => {
     return () => document.removeEventListener('keydown', onKeyPress);
   }, [onKeyPress]);
 
-  console.log(gameState);
-
   return (
     <>
       <Toaster position="top-left" />
