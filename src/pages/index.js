@@ -8,7 +8,6 @@ import {
   getKeyboardState,
   getWordOfTheDay,
   isWordValid,
-  lettersCount,
 } from '../utils/utils';
 import { GAME_STATUS } from '../utils/constants';
 import toast, { Toaster } from 'react-hot-toast';
