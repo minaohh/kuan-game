@@ -127,6 +127,14 @@ const Header = ({
             </span>
           </span>
         </div>
+
+        <hr />
+        <span className="flex flex-col mb-3 font-semibold">
+          <span>A new KUAN will be available each day!</span>
+          <span className="font-extralight italic text-sm">
+            Naay bag-ong KUAN adlaw-adlaw
+          </span>
+        </span>
       </Modal>
 
       <Modal
