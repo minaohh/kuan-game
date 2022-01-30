@@ -1,9 +1,9 @@
 import db from '../data/db.json';
 import words from '../data/wod.json';
-import { LANG_BISAYA } from './constants';
+import { LANG_CEBUANO } from './constants';
 
 export const GAME_MODE = {
-  language: LANG_BISAYA,
+  language: LANG_CEBUANO,
   length: 5,
 };
 
@@ -139,3 +139,9 @@ export const lettersCount = (word = getWordOfTheDay(), mode = GAME_MODE) => {
 
 // Formats date to yyyy-MM-dd
 export const formatDate = (date) => date.toISOString().slice(0, 10);
+
+// Returns the link of the correct word
+export const getWordDictLink = (wod = getWordOfTheDay(), mode = GAME_MODE) => {
+  // e.g. https://cebuano.pinoydictionary.com/word/sayaw/
+  return `https://${mode.language}.pinoydictionary.com/word/${wod}/`;
+};

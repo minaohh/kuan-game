@@ -6,25 +6,13 @@ import Word from './component/Word';
 import {
   checkWord,
   getKeyboardState,
+  getWordDictLink,
   getWordOfTheDay,
   isWordValid,
   lettersCount,
 } from '../utils/utils';
 import { GAME_STATUS } from '../utils/constants';
 import toast, { Toaster } from 'react-hot-toast';
-
-const tests = () => {
-  console.log('word of the day : ', getWordOfTheDay());
-
-  const guess = 'LIHOK'; // wod: hilom, guess: lihok, nipis
-  console.log('Guess: ', guess);
-  // console.log('lettersCount: ', lettersCount());
-  // console.log('is guess in dictionary? ', isWordValid(guess));
-
-  let result = checkWord(guess);
-  console.log('result: ', result);
-  console.log('keyboard: ', getKeyboardState(guess, result));
-};
 
 const BOARD_STATE = ['', '', '', '', '', ''];
 
@@ -47,6 +35,21 @@ const STATISTICS = {
 
 const WORD_OF_THE_DAY = getWordOfTheDay();
 
+const tests = () => {
+  console.log('word of the day : ', getWordOfTheDay());
+
+  console.log('word link: ', getWordDictLink(WORD_OF_THE_DAY));
+
+  // const guess = 'LIHOK'; // wod: hilom, guess: lihok, nipis
+  // console.log('Guess: ', guess);
+  // console.log('lettersCount: ', lettersCount());
+  // console.log('is guess in dictionary? ', isWordValid(guess));
+
+  // let result = checkWord(guess);
+  // console.log('result: ', result);
+  // console.log('keyboard: ', getKeyboardState(guess, result));
+};
+
 const Kuan = () => {
   const [evaluations, setEvaluations] = useState(new Array(BOARD_STATE.length));
   const [gameBoard, setGameBoard] = useState(BOARD_STATE);
@@ -67,7 +70,6 @@ const Kuan = () => {
   );
 
   // tests();
-  // console.log(gameBoard);
 
   const checkGameState = useCallback(() => {
     return guess.toLowerCase() === WORD_OF_THE_DAY.toLowerCase()
@@ -156,6 +158,8 @@ const Kuan = () => {
           toggleHowModal={toggleHowModal}
           toggleSettingsModal={toggleSettingsModal}
           toggleStatsModal={toggleStatsModal}
+          gameStats={STATISTICS}
+          wordOfTheDay={WORD_OF_THE_DAY}
         />
         <div className="space-y-1">
           {gameBoard.map((word, index) => (

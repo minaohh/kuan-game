@@ -2,7 +2,10 @@ import {
   ChartBarIcon,
   CogIcon,
   QuestionMarkCircleIcon,
+  ExternalLinkIcon,
+  ShareIcon,
 } from '@heroicons/react/outline';
+import { getWordDictLink, getWordOfTheDay } from '../../utils/utils';
 import Modal from './Modal';
 import Word from './Word';
 
@@ -13,6 +16,8 @@ const Header = ({
   toggleHowModal,
   toggleSettingsModal,
   toggleStatsModal,
+  gameStats, //Statistics modal content
+  wordOfTheDay = getWordOfTheDay(),
 }) => {
   return (
     <header className="flex items-center justify-between p-1 border-b">
@@ -125,12 +130,79 @@ const Header = ({
         </span>
       </Modal>
 
-      <Modal
-        show={showStatsModal}
-        title="Statistics"
-        toggle={toggleStatsModal}
-      ></Modal>
+      {/* Statistics modal dialog */}
+      <Modal show={showStatsModal} title="Statistics" toggle={toggleStatsModal}>
+        <div className="flex flex-col text-center space-y-5 items-center">
+          <div className="flex flex-row space-x-6">
+            <div className="flex flex-col">
+              <span className="text-4xl">{gameStats.gamesPlayed}</span>
+              <span className="text-xs font-light">Played</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-4xl">{gameStats.winPercentage}</span>
+              <span className="text-xs font-light">Win %</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-4xl">{gameStats.currentStreak}</span>
+              <span className="text-xs font-light">
+                Current
+                <br />
+                Streak
+              </span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-4xl">{gameStats.maxStreak}</span>
+              <span className="text-xs font-light">
+                Max
+                <br />
+                Streak
+              </span>
+            </div>
+          </div>
 
+          {/* Graph */}
+          <div className="flex flex-col">
+            <h3 className="font-bold text-lg">Guess Distribution</h3>
+            <p className="font-thin">Insert bar graph here (TODO)</p>
+          </div>
+
+          <hr />
+
+          {/* Word definition */}
+          <div className="flex flex-col">
+            <h1 className="font-bold text-4xl font-normal font-mono tracking-widest">
+              {wordOfTheDay.toUpperCase()}
+            </h1>
+            <button
+              onClick={() => window.open(getWordDictLink(wordOfTheDay))}
+              className="rounded flex-row flex align-middle bg-indigo-500 py-2 px-4 text-white"
+            >
+              <span>View Definition</span>
+              <ExternalLinkIcon className="w-6 h-6 ml-2" />
+            </button>
+          </div>
+          <hr />
+
+          {/* Next word */}
+          <div className="grid grid-cols-2 divide-x gap-x-4">
+            <div className="flex flex-col">
+              <h1 className="font-semibold ">NEXT KUAN</h1>
+              <h1 className="text-4xl tracking-wider">11:16:23</h1>
+            </div>
+            <div className="">
+              <button
+                onClick={() => {}}
+                className="rounded flex-row flex align-middle bg-green-600 py-2 px-4 text-white"
+              >
+                <span className="font-semibold text-xl">SHARE</span>
+                <ShareIcon className="w-6 h-6 ml-2" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Settings Modal */}
       <Modal
         show={showSettingsModal}
         title="Settings"
