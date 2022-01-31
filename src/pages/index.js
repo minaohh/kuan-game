@@ -133,11 +133,16 @@ const Kuan = () => {
                 statistics.guesses.fail++;
               }
 
+              if (statistics.maxStreak < statistics.currentStreak) {
+                statistics.maxStreak = statistics.currentStreak;
+              }
+
               statistics.gamesPlayed++;
               statistics.winPercentage = Math.floor(
                 (statistics.gamesWon / statistics.gamesPlayed) * 100
               );
               saveGameState(GAME_STATISTICS_KEY, { ...statistics });
+              setStatistics({ ...statistics });
               setStatsModalState(true);
             } else {
               setRowIndex(boardState.indexOf(''));
@@ -230,7 +235,7 @@ const Kuan = () => {
     }
 
     if (statistics !== null) {
-      setStatistics(statistics);
+      setStatistics({ ...statistics });
     }
   }, []);
 
