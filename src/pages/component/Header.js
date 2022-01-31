@@ -7,7 +7,11 @@ import {
   ExternalLinkIcon,
   ShareIcon,
 } from '@heroicons/react/outline';
-import { getWordDictLink, getWordOfTheDay } from '../../utils/utils';
+import {
+  getShareStatus,
+  getWordDictLink,
+  getWordOfTheDay,
+} from '../../utils/utils';
 import { useTheme } from 'next-themes';
 
 import Modal from './Modal';
@@ -23,13 +27,15 @@ const Header = ({
   toggleSettingsModal,
   toggleStatsModal,
   gameStats, //Statistics modal content
-  gameStatus,
+  gameState,
   wordOfTheDay = getWordOfTheDay(),
 }) => {
   const { theme, setTheme } = useTheme();
   const [enabled, setEnabled] = useState(theme === 'dark');
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
   const [guesses, setGuesses] = useState([]);
+
+  const { boardState, evaluations, gameStatus } = gameState;
 
   const toggleTheme = () => {
     setEnabled(theme !== 'dark');
@@ -249,41 +255,50 @@ const Header = ({
 
           {/* Word definition */}
           {gameStatus !== GAME_STATUS.IN_PROGRESS && (
-            <div className="flex flex-col">
-              <h1 className="font-mono text-4xl font-normal tracking-widest">
-                {wordOfTheDay.toUpperCase()}
-              </h1>
-              <button
-                onClick={() => window.open(getWordDictLink(wordOfTheDay))}
-                className="inline-flex items-center h-8 px-5 text-sm text-white align-middle transition-colors duration-150 bg-indigo-500 rounded-lg focus:shadow-outline hover:bg-indigo-800"
-              >
-                <span>View Definition</span>
-                <ExternalLinkIcon className="w-4 h-4 ml-2" />
-              </button>
-            </div>
-          )}
-          <hr />
+            <>
+              <div className="flex flex-col">
+                <h1 className="font-mono text-4xl font-normal tracking-widest">
+                  {wordOfTheDay.toUpperCase()}
+                </h1>
+                <button
+                  onClick={() => window.open(getWordDictLink(wordOfTheDay))}
+                  className="inline-flex items-center h-8 px-5 text-sm text-white align-middle transition-colors duration-150 bg-indigo-500 rounded-lg focus:shadow-outline hover:bg-indigo-800"
+                >
+                  <span>View Definition</span>
+                  <ExternalLinkIcon className="w-4 h-4 ml-2" />
+                </button>
+              </div>
 
-          {/* Next word */}
-          <div className="flex items-center justify-center space-x-5">
-            <div className="flex flex-col">
-              <h1 className="font-semibold ">NEXT KUAN</h1>
-              <h1 className="font-mono text-3xl tracking-wider md:text-4xl">
-                {`${timeLeft.hours < 10 ? '0' : ''}${timeLeft.hours}`}:
-                {`${timeLeft.minutes < 10 ? '0' : ''}${timeLeft.minutes}`}:
-                {`${timeLeft.seconds < 10 ? '0' : ''}${timeLeft.seconds}`}
-              </h1>
-            </div>
-            <div className="">
-              <button
-                onClick={() => {}}
-                className="inline-flex items-center px-5 m-2 text-white transition-colors duration-150 bg-green-600 rounded-lg h-14 focus:shadow-outline hover:bg-green-900"
-              >
-                <span className="text-3xl font-semibold">SHARE</span>
-                <ShareIcon className="w-8 h-8 ml-2" />
-              </button>
-            </div>
-          </div>
+              <hr />
+
+              <div className="flex items-center justify-center space-x-5">
+                <div className="flex flex-col">
+                  <h1 className="font-semibold ">NEXT KUAN</h1>
+                  <h1 className="font-mono text-3xl tracking-wider md:text-4xl">
+                    {`${timeLeft.hours < 10 ? '0' : ''}${timeLeft.hours}`}:
+                    {`${timeLeft.minutes < 10 ? '0' : ''}${timeLeft.minutes}`}:
+                    {`${timeLeft.seconds < 10 ? '0' : ''}${timeLeft.seconds}`}
+                  </h1>
+                </div>
+                <div className="">
+                  <button
+                    onClick={() => {
+                      getShareStatus(
+                        boardState,
+                        evaluations,
+                        gameStatus,
+                        theme === 'dark'
+                      );
+                    }}
+                    className="inline-flex items-center px-5 m-2 text-white transition-colors duration-150 bg-green-600 rounded-lg h-14 focus:shadow-outline hover:bg-green-900"
+                  >
+                    <span className="text-3xl font-semibold">SHARE</span>
+                    <ShareIcon className="w-8 h-8 ml-2" />
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </Modal>
 

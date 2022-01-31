@@ -192,10 +192,54 @@ export const checkGameStatus = (guess, rowIndex, wod, mode = GAME_MODE) => {
 export const loadGameState = (key) =>
   JSON.parse(window.localStorage.getItem(key));
 
-export const saveGameState = (key, value) =>
+export const saveToLocalStorage = (key, value) =>
   window.localStorage.setItem(key, JSON.stringify(value));
 
-export const getShareStatus = () => {};
+export const getShareStatus = (
+  boardState,
+  evaluations,
+  gameStatus,
+  isDark,
+  mode = GAME_MODE
+) => {
+  const wordToday = words[formatDate(new Date())];
+
+  const gameCount = wordToday['gameId'];
+
+  const lastWordIdx =
+    boardState.indexOf('') < 0 ? mode.length + 1 : boardState.indexOf('');
+  const scoreWon = `🏆${lastWordIdx}/${mode.length + 1}`;
+  const scoreLose = `X/${mode.length + 1}`;
+
+  const resultsGrid = evaluations
+    .filter((val) => val && val != null)
+    .map((ans) => {
+      return ans
+        .filter((val) => val && val != null)
+        .map((row) => {
+          switch (row) {
+            case 'correct':
+              return '🟩';
+            case 'present':
+              return '🟨';
+            case 'absent':
+              return isDark ? '⬛️' : '⬜️';
+          }
+        })
+        .join('');
+    })
+    .join('\n');
+
+  const ps = '#KanangKuan';
+
+  let output =
+    `Kuan #${gameCount} ${
+      gameStatus === GAME_STATUS.WIN ? scoreWon : scoreLose
+    }` + `\n\n${resultsGrid}\n\n${ps}`;
+
+  console.log(output);
+  return output;
+};
 
 // GAME STATUS workaround
 // const lastGuessIdx = tempState.boardState.indexOf('') - 1;
