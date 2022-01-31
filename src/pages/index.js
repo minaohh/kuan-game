@@ -12,7 +12,7 @@ import {
   checkGameStatus,
   keyboardStateInit,
   loadGameState,
-  saveGameState,
+  saveToLocalStorage,
   formatDate,
 } from '../utils/utils';
 import {
@@ -142,18 +142,29 @@ const Kuan = () => {
               statistics.winPercentage = Math.floor(
                 (statistics.gamesWon / statistics.gamesPlayed) * 100
               );
-              saveGameState(GAME_STATISTICS_KEY, { ...statistics });
+              saveToLocalStorage(GAME_STATISTICS_KEY, { ...statistics });
               setStatistics({ ...statistics });
               setStatsModalState(true);
             } else {
               setRowIndex(boardState.indexOf(''));
             }
 
-            saveGameState(GAME_STATE_KEY, {
+            let _lastPlayed = formatDate(new Date());
+            saveToLocalStorage(GAME_STATE_KEY, {
               boardState,
               evaluations,
               gameStatus,
-              lastPlayed: new Date(),
+              lastPlayed: _lastPlayed,
+              lastCompleted: lastCompletedDate,
+              rowIndex,
+              wod,
+            });
+
+            console.log('ojb', {
+              boardState,
+              evaluations,
+              gameStatus,
+              lastPlayed: _lastPlayed,
               lastCompleted: lastCompletedDate,
               rowIndex,
               wod,
@@ -220,7 +231,7 @@ const Kuan = () => {
 
       // Check if we need to reset (new day)
       let reset =
-        storage.lastPlayed &&
+        storage.lastPlayed != null &&
         storage.lastPlayed.slice(0, 10) !== formatDate(new Date());
 
       setLastPlayed(storage.lastPlayed);
@@ -277,7 +288,7 @@ const Kuan = () => {
           toggleStatsModal={toggleStatsModal}
           gameStats={statistics}
           wordOfTheDay={wod}
-          gameStatus={gameStatus}
+          gameState={{ boardState, evaluations, gameStatus }}
         />
         <div className="space-y-1">
           {boardState.map((word, index) => (
