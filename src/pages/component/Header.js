@@ -245,7 +245,9 @@ const Header = ({
                 <div key={index} className="flex flex-row w-full space-x-1">
                   <p>{index + 1}</p>
                   <div
-                    className="px-1 text-white bg-gray-600"
+                    className={`px-1 text-white ${
+                      guess.value > 0 ? 'bg-green-600' : 'bg-gray-600'
+                    }`}
                     style={{
                       minWidth: '10%',
                       width:
@@ -316,7 +318,7 @@ const Header = ({
         title="Settings"
         toggle={toggleSettingsModal}
       >
-        <div className="space-y-4 w-60 md:w-80">
+        <div className="space-y-6 w-60 md:w-96">
           <div className="flex items-center justify-between">
             <p>Dark Mode</p>
             <Switch
@@ -335,26 +337,65 @@ const Header = ({
           </div>
           <div className="flex items-center justify-between">
             <p>Feedback</p>
-            <div className="space-x-3">
-              <Link href="mailto:teamminjay@gmail.com">
+            <div className="space-x-3 divide-x-2 divide-gray-600">
+              <Link href="mailto:teamminjay@gmail.com?subject=KuanFeedback">
                 <a className="underline" target="_blank">
                   Email
                 </a>
               </Link>
-              <Link href="https://twitter.com/TeamMinJay">
-                <a className="underline" target="_blank">
+              <Link href="https://twitter.com/intent/tweet?screen_name=TeamMinJay">
+                <a className="underline pl-3" target="_blank">
                   Twitter
                 </a>
               </Link>
             </div>
           </div>
           <hr />
-          <div className="flex flex-col items-center justify-center text-center">
-            <h1 className="space-x-3 text-3xl font-bold">
+
+          {/* About */}
+          <div className="flex flex-col items-center justify-center text-center pt-4">
+            <h1 className="space-x-3 text-4xl font-bold">
               <span>KUAN</span>
               <small className="font-mono text-sm text-gray-400">v1.0.0</small>
             </h1>
-            <p>Kuan game details here</p>
+            <span className="font-light text-sm text-left justify-items-start pt-4 space-y-2">
+              <p>
+                Kuan is a Bisaya or Cebuano clone of the popular game,{' '}
+                <a
+                  href="https://www.powerlanguage.co.uk/wordle/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:underline"
+                >
+                  Wordle
+                </a>
+                .{' '}
+              </p>
+              <p>
+                Words list parsed from{' '}
+                <a
+                  href="https://cebuano.pinoydictionary.com/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:underline"
+                >
+                  cebuano.pinoydictionary.com
+                </a>
+              </p>
+              <p className="pt-8 font-light">
+                Created with ❤ by{' '}
+                <a
+                  href="https://twitter.com/TeamMinJay"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:underline  decoration-pink-800 "
+                >
+                  <span className="bg-pink-200 font-semibold">
+                    @TeamMinJay{' '}
+                  </span>
+                </a>
+              </p>
+            </span>
           </div>
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-bold"></h1>
