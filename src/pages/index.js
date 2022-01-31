@@ -10,12 +10,14 @@ import {
   getWordOfTheDay,
   isWordValid,
 } from '../utils/utils';
-import { GAME_STATUS } from '../utils/constants';
+import { GAME_STATE_STR, GAME_STATUS } from '../utils/constants';
 import toast, { Toaster } from 'react-hot-toast';
 
-const BOARD_STATE = ['', '', '', '', '', ''];
+// Initial values
+const INIT_BOARD_STATE = ['', '', '', '', '', ''];
+const INIT_WOD = getWordOfTheDay();
 
-const STATISTICS = {
+const statistics = {
   currentStreak: 0,
   gamesPlayed: 0,
   gamesWon: 0,
@@ -32,12 +34,21 @@ const STATISTICS = {
   winPercentage: 0,
 };
 
-const WORD_OF_THE_DAY = getWordOfTheDay();
+const INIT_GAME_STATE = {
+  boardState: INIT_BOARD_STATE,
+  evaluations: new Array(INIT_BOARD_STATE.length),
+  gameStatus: GAME_STATUS.IN_PROGRESS,
+  lastPlayed: new Date(),
+  lastCompleted: null,
+  rowIndex: 0,
+  // keyboardState: getKeyboardState(),
+  wod: INIT_WOD,
+};
 
 const tests = () => {
   console.log('word of the day : ', getWordOfTheDay());
 
-  console.log('word link: ', getWordDictLink(WORD_OF_THE_DAY));
+  console.log('word link: ', getWordDictLink(INIT_WOD));
 
   // const guess = 'LIHOK'; // wod: hilom, guess: lihok, nipis
   // console.log('Guess: ', guess);
@@ -50,17 +61,25 @@ const tests = () => {
 };
 
 const Kuan = () => {
-  const [evaluations, setEvaluations] = useState(new Array(BOARD_STATE.length));
-  const [gameBoard, setGameBoard] = useState(BOARD_STATE);
-  const [gameState, setGameState] = useState(GAME_STATUS.IN_PROGRESS);
-  const [guess, setGuess] = useState('');
-  const [keyboardState, setKeyboardState] = useState(getKeyboardState());
-  const [rowIndex, setRowIndex] = useState(gameBoard.indexOf(''));
+  // Game State
+  const [gameState, setGameState] = useState(INIT_GAME_STATE);
+  const [evaluations, setEvaluations] = useState(gameState.evaluations);
+  const [boardState, setBoardState] = useState(gameState.boardState);
+  const [gameStatus, setGameStatus] = useState(gameState.gameStatus);
+  const [rowIndex, setRowIndex] = useState(gameState.rowIndex);
+  const [lastPlayed, setLastPlayed] = useState(gameState.lastPlayed);
+  const [lastCompleted, setLastCompleted] = useState(gameState.lastCompleted);
+  const [wod, setWod] = useState(gameState.wod);
+  // Stats
+  const [stats, setStats] = useState(statistics);
+  // Modal State
   const [showSettingsModal, setSettingsModalState] = useState(false);
-  const [showHowModal, setHowModalState] = useState(false);
   const [showStatsModal, setStatsModalState] = useState(false);
-  const [stats, setStats] = useState(STATISTICS);
-
+  const [showHowModal, setHowModalState] = useState(false);
+  // Real-time
+  const [keyboardState, setKeyboardState] = useState(getKeyboardState());
+  const [guess, setGuess] = useState('');
+  // Modal functions
   const toggleHowModal = () => setHowModalState(!showHowModal);
   const toggleSettingsModal = () => setSettingsModalState(!showSettingsModal);
   const toggleStatsModal = useCallback(
@@ -70,10 +89,37 @@ const Kuan = () => {
 
   // tests();
 
-  const checkGameState = useCallback(() => {
-    return guess.toLowerCase() === WORD_OF_THE_DAY.toLowerCase()
+  useEffect(() => {
+    // Get user state
+    const temp = window.localStorage.getItem('gameState');
+    console.log('localStorage - get: ', temp);
+
+    if (temp !== null) {
+      const tempState = JSON.parse(temp);
+      setGameState({ ...tempState });
+
+      setBoardState(tempState.boardState);
+      setEvaluations(tempState.evaluations);
+      setGameStatus(tempState.gameStatus);
+      setLastPlayed(tempState.lastPlayed);
+      setLastCompleted(tempState.lastCompleted);
+      setRowIndex(tempState.rowIndex);
+      setWod(tempState.wod);
+
+      // let i = 0;
+      // while (boardState[i] !== '') {
+      //   setKeyboardState(
+      //     getKeyboardState(boardState[i], evaluations[i], keyboardState)
+      //   );
+      //   i++;
+      // }
+    }
+  }, []);
+
+  const checkGameStatus = useCallback(() => {
+    return guess.toLowerCase() === wod.toLowerCase()
       ? GAME_STATUS.WIN
-      : rowIndex < BOARD_STATE.length
+      : rowIndex < INIT_BOARD_STATE.length
       ? GAME_STATUS.IN_PROGRESS
       : GAME_STATUS.LOSE;
   }, [guess, rowIndex]);
@@ -81,23 +127,25 @@ const Kuan = () => {
   const handlePress = useCallback(
     (keyCode) => {
       if (keyCode >= 65 && keyCode <= 90) {
-        if (guess.length < BOARD_STATE.length - 1) {
+        // LETTERS
+        if (guess.length < INIT_BOARD_STATE.length - 1) {
           const character = String.fromCharCode(keyCode);
           const letters = `${guess}${character}`;
           setGuess(letters);
         }
       } else if (keyCode === 8) {
+        // BACKSPACE
         if (guess.length) {
           const letters = guess.substring(0, guess.length - 1);
           setGuess(letters);
         }
       } else if (keyCode === 13) {
-        // enter
-        if (guess.length === BOARD_STATE.length - 1) {
+        // ENTER KEY
+        if (guess.length === INIT_BOARD_STATE.length - 1) {
           if (isWordValid(guess)) {
             const evaluation = checkWord(guess);
             evaluations[rowIndex] = evaluation;
-            gameBoard[rowIndex] = guess;
+            boardState[rowIndex] = guess;
             const keyboardState = getKeyboardState(
               guess,
               evaluation,
@@ -105,27 +153,51 @@ const Kuan = () => {
             );
             setKeyboardState(keyboardState);
             setGuess('');
-            setRowIndex(gameBoard.indexOf(''));
+            setRowIndex(boardState.indexOf(''));
             setEvaluations([...evaluations]);
-            setGameBoard([...gameBoard]);
-            setGameState(checkGameState());
+            setBoardState([...boardState]);
+            setGameStatus(checkGameStatus());
 
-            if (checkGameState() !== GAME_STATUS.IN_PROGRESS) {
+            if (checkGameStatus() !== GAME_STATUS.IN_PROGRESS) {
               toggleStatsModal();
             }
+
+            updateGameState();
           } else {
             toast.error('Kuan... Wala sa listahan\n(Word not on the list)');
           }
         }
       }
     },
-    [checkGameState, evaluations, gameBoard, guess, rowIndex, toggleStatsModal]
+    [
+      checkGameStatus,
+      evaluations,
+      boardState,
+      guess,
+      rowIndex,
+      toggleStatsModal,
+      updateGameState,
+    ]
   );
+
+  const updateGameState = useCallback(() => {
+    const newState = {
+      ...gameState,
+      boardState,
+      evaluations,
+      gameStatus,
+      lastPlayed,
+      lastCompleted,
+      rowIndex,
+      wod,
+    };
+    window.localStorage.setItem(GAME_STATE_STR, JSON.stringify(newState));
+  });
 
   const onKeyPress = useCallback(
     (event) => {
       if (
-        gameState === GAME_STATUS.IN_PROGRESS &&
+        gameStatus === GAME_STATUS.IN_PROGRESS &&
         !showHowModal &&
         !showSettingsModal &&
         !showStatsModal
@@ -133,7 +205,7 @@ const Kuan = () => {
         handlePress(event.keyCode);
       }
     },
-    [gameState, handlePress, showHowModal, showSettingsModal, showStatsModal]
+    [gameStatus, handlePress, showHowModal, showSettingsModal, showStatsModal]
   );
 
   const onPress = (keyCode) => {
@@ -157,22 +229,22 @@ const Kuan = () => {
           toggleHowModal={toggleHowModal}
           toggleSettingsModal={toggleSettingsModal}
           toggleStatsModal={toggleStatsModal}
-          gameStats={STATISTICS}
-          wordOfTheDay={WORD_OF_THE_DAY}
+          gameStats={statistics}
+          wordOfTheDay={wod}
         />
         <div className="space-y-1">
-          {gameBoard.map((word, index) => (
+          {boardState.map((word, index) => (
             <Word
               key={index}
               evaluation={evaluations[index]}
-              length={BOARD_STATE.length - 1}
+              length={INIT_BOARD_STATE.length - 1}
               word={word || (index === rowIndex ? guess : '')}
             />
           ))}
         </div>
         <Keyboard
           disabled={
-            gameState !== GAME_STATUS.IN_PROGRESS ||
+            gameStatus !== GAME_STATUS.IN_PROGRESS ||
             showHowModal ||
             showSettingsModal ||
             showStatsModal
