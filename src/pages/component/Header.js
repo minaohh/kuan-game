@@ -12,6 +12,7 @@ import { useTheme } from 'next-themes';
 
 import Modal from './Modal';
 import Word from './Word';
+import { GAME_STATUS } from '../../utils/constants';
 
 const Header = ({
   showHowModal,
@@ -21,6 +22,7 @@ const Header = ({
   toggleSettingsModal,
   toggleStatsModal,
   gameStats, //Statistics modal content
+  gameStatus,
   wordOfTheDay = getWordOfTheDay(),
 }) => {
   const { theme, setTheme } = useTheme();
@@ -136,7 +138,7 @@ const Header = ({
         <hr />
         <span className="flex flex-col mb-3 font-semibold">
           <span>A new KUAN will be available each day!</span>
-          <span className="font-extralight italic text-sm">
+          <span className="text-sm italic font-extralight">
             Naay bag-ong KUAN adlaw-adlaw
           </span>
         </span>
@@ -144,7 +146,7 @@ const Header = ({
 
       {/* Statistics modal dialog */}
       <Modal show={showStatsModal} title="Statistics" toggle={toggleStatsModal}>
-        <div className="flex flex-col text-center space-y-5 items-center">
+        <div className="flex flex-col items-center space-y-5 text-center">
           <div className="flex flex-row space-x-6">
             <div className="flex flex-col">
               <span className="text-4xl">{gameStats.gamesPlayed}</span>
@@ -174,25 +176,27 @@ const Header = ({
 
           {/* Graph */}
           <div className="flex flex-col">
-            <h3 className="font-bold text-lg">Guess Distribution</h3>
+            <h3 className="text-lg font-bold">Guess Distribution</h3>
             <p className="font-thin">Insert bar graph here (TODO)</p>
           </div>
 
           <hr />
 
           {/* Word definition */}
-          <div className="flex flex-col">
-            <h1 className="font-bold text-4xl font-normal font-mono tracking-widest">
-              {wordOfTheDay.toUpperCase()}
-            </h1>
-            <button
-              onClick={() => window.open(getWordDictLink(wordOfTheDay))}
-              className="rounded flex-row flex align-middle bg-indigo-500 py-2 px-4 text-white"
-            >
-              <span>View Definition</span>
-              <ExternalLinkIcon className="w-6 h-6 ml-2" />
-            </button>
-          </div>
+          {gameStatus !== GAME_STATUS.IN_PROGRESS && (
+            <div className="flex flex-col">
+              <h1 className="font-mono text-4xl font-normal tracking-widest">
+                {wordOfTheDay.toUpperCase()}
+              </h1>
+              <button
+                onClick={() => window.open(getWordDictLink(wordOfTheDay))}
+                className="flex flex-row px-4 py-2 text-white align-middle bg-indigo-500 rounded"
+              >
+                <span>View Definition</span>
+                <ExternalLinkIcon className="w-6 h-6 ml-2" />
+              </button>
+            </div>
+          )}
           <hr />
 
           {/* Next word */}
@@ -204,9 +208,9 @@ const Header = ({
             <div className="">
               <button
                 onClick={() => {}}
-                className="rounded flex-row flex align-middle bg-green-600 py-2 px-4 text-white"
+                className="flex flex-row px-4 py-2 text-white align-middle bg-green-600 rounded"
               >
-                <span className="font-semibold text-xl">SHARE</span>
+                <span className="text-xl font-semibold">SHARE</span>
                 <ShareIcon className="w-6 h-6 ml-2" />
               </button>
             </div>
