@@ -11,15 +11,15 @@ import {
   getShareStatus,
   getWordDictLink,
   getWordOfTheDay,
-} from '../../utils/utils';
+} from '../utils/utils';
 import { useTheme } from 'next-themes';
 import toast from 'react-hot-toast';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import Modal from './Modal';
 import Word from './Word';
-import { GAME_STATUS } from '../../utils/constants';
-import { calculateTimeLeft } from '../../utils/utils';
+import { GAME_STATUS } from '../utils/constants';
+import { calculateTimeLeft } from '../utils/utils';
 import Link from 'next/link';
 
 const Header = ({

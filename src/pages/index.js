@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import Header from './component/Header';
-import Keyboard from './component/Keyboard';
-import Meta from './component/Meta';
-import Word from './component/Word';
+import Header from '../component/Header';
+import Keyboard from '../component/Keyboard';
+import Meta from '../component/Meta';
+import Word from '../component/Word';
 import {
   checkWord,
   getKeyboardState,
