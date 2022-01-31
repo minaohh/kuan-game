@@ -13,6 +13,7 @@ import {
   keyboardStateInit,
   loadGameState,
   saveGameState,
+  formatDate,
 } from '../utils/utils';
 import {
   GAME_STATE_KEY,
@@ -126,10 +127,16 @@ const Kuan = () => {
                 lastCompletedDate = new Date();
                 statistics.guesses[`${rowIndex + 1}`]++;
                 statistics.gamesWon++;
+                statistics.currentStreak++;
               } else {
+                statistics.currentStreak = 0;
                 statistics.guesses.fail++;
               }
 
+              statistics.gamesPlayed++;
+              statistics.winPercentage = Math.floor(
+                (statistics.gamesWon / statistics.gamesPlayed) * 100
+              );
               saveGameState(GAME_STATISTICS_KEY, { ...statistics });
               setStatsModalState(true);
             } else {
@@ -174,57 +181,56 @@ const Kuan = () => {
   }, [onKeyPress]);
 
   useEffect(() => {
-    // Get local user state
-    const temp = loadGameState(GAME_STATE_KEY);
+    // Load user info from local storage
+    const tempGameState = loadGameState(GAME_STATE_KEY);
     const statistics = loadGameState(GAME_STATISTICS_KEY);
 
-    if (temp !== null) {
-      const tempState = JSON.parse(temp);
-      // console.log('localStorage: ', tempState);
+    if (tempGameState !== null) {
+      const storage = tempGameState;
 
-      setBoardState(tempState.boardState);
-      setEvaluations(tempState.evaluations);
-      setLastPlayed(tempState.lastPlayed);
-      setLastCompleted(tempState.lastCompleted);
+      // Check if we need to reset (new day)
+      let reset =
+        storage.lastPlayed &&
+        storage.lastPlayed.slice(0, 10) !== formatDate(new Date());
 
-      const newRow = tempState.rowIndex + 1;
-      setRowIndex(newRow);
-      setWod(tempState.wod);
+      setLastPlayed(storage.lastPlayed);
+      setLastCompleted(storage.lastCompleted);
 
-      // GAME STATUS
-      const lastGuessIdx = tempState.boardState.indexOf('') - 1;
-      // console.log('lastGuessIdx', lastGuessIdx);
-      const lastGuess =
-        lastGuessIdx >= 0 ? tempState.boardState[lastGuessIdx] : '';
-      const gameStat = checkGameStatus(lastGuess, newRow, tempState.wod);
-      // console.log('gameStat', gameStat);
-      // console.log('lastGuess', lastGuess);
-      setGameStatus(gameStat);
+      if (reset) {
+        // new word for a new day
+        setWod(getWordOfTheDay());
+      } else {
+        setBoardState(storage.boardState);
+        setEvaluations(storage.evaluations);
 
-      if (gameStat !== GAME_STATUS.IN_PROGRESS) {
-        setStatsModalState(true);
-      }
-
-      // KEYBOARD STATE
-      let tempKeyboard = keyboardStateInit;
-      tempState.boardState.forEach((val, i) => {
-        if (val !== '') {
-          let kbs = getKeyboardState(
-            val,
-            tempState.evaluations[i],
-            tempKeyboard
-          );
-          // console.log('val', val);
-          // console.log('i', tempState.evaluations[i]);
-          tempKeyboard = kbs;
+        // Game Status
+        setGameStatus(storage.gameStatus);
+        if (storage.gameStatus !== GAME_STATUS.IN_PROGRESS) {
+          setStatsModalState(true);
         }
-      });
-      // console.log('tempKeyboard', tempKeyboard);
-      setKeyboardState(tempKeyboard);
+
+        const newRow = storage.rowIndex + 1;
+        setRowIndex(newRow);
+        setWod(storage.wod);
+
+        // KEYBOARD STATE
+        let tempKeyboard = keyboardStateInit;
+        storage.boardState.forEach((val, i) => {
+          if (val !== '') {
+            let kbs = getKeyboardState(
+              val,
+              storage.evaluations[i],
+              tempKeyboard
+            );
+            tempKeyboard = kbs;
+          }
+        });
+        setKeyboardState(tempKeyboard);
+      }
     }
 
     if (statistics !== null) {
-      setStatistics(JSON.parse(statistics));
+      setStatistics(statistics);
     }
   }, []);
 

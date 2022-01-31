@@ -83,7 +83,6 @@ const Header = ({
       value: gameStats.guesses['6'],
     });
     setGuesses([...guesses]);
-    console.log(guesses);
   }, [gameStats]);
 
   return (
