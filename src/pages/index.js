@@ -11,8 +11,10 @@ import {
   isWordValid,
   checkGameStatus,
   keyboardStateInit,
+  loadGameState,
+  saveGameState,
 } from '../utils/utils';
-import { GAME_STATE_STR, GAME_STATUS } from '../utils/constants';
+import { GAME_STATE_KEY, GAME_STATUS } from '../utils/constants';
 import toast, { Toaster } from 'react-hot-toast';
 
 // Initial values
@@ -70,10 +72,7 @@ const Kuan = () => {
   // Modal functions
   const toggleHowModal = () => setHowModalState(!showHowModal);
   const toggleSettingsModal = () => setSettingsModalState(!showSettingsModal);
-  const toggleStatsModal = useCallback(
-    () => setStatsModalState(!showStatsModal),
-    [showStatsModal]
-  );
+  const toggleStatsModal = () => setStatsModalState(!showStatsModal);
 
   const isGameInProgress =
     gameStatus === GAME_STATUS.IN_PROGRESS &&
@@ -81,32 +80,32 @@ const Kuan = () => {
     !showSettingsModal &&
     !showStatsModal;
 
-  const updateGameState = useCallback(() => {
-    // console.log('gameStatus', checkGameStatus());
-    // console.log('rowIndex', rowIndex);
+  // const updateGameState = useCallback(() => {
+  // console.log('gameStatus', checkGameStatus());
+  // console.log('rowIndex', rowIndex);
 
-    const newState = {
-      // ...gameState,
-      boardState,
-      evaluations,
-      gameStatus,
-      lastPlayed,
-      lastCompleted,
-      rowIndex,
-      wod,
-    };
-    // console.log('newstate ', newState);
-    // console.log(JSON.stringify(newState));
-    window.localStorage.setItem(GAME_STATE_STR, JSON.stringify(newState));
-  }, [
-    boardState,
-    evaluations,
-    gameStatus,
-    lastPlayed,
-    lastCompleted,
-    rowIndex,
-    wod,
-  ]);
+  // const newState = {
+  //   // ...gameState,
+  //   boardState,
+  //   evaluations,
+  //   gameStatus,
+  //   lastPlayed,
+  //   lastCompleted,
+  //   rowIndex,
+  //   wod,
+  // };
+  // console.log('newstate ', newState);
+  // console.log(JSON.stringify(newState));
+  // window.localStorage.setItem(GAME_STATE_KEY, JSON.stringify(newState));
+  // }, [
+  //   boardState,
+  //   evaluations,
+  //   gameStatus,
+  //   lastPlayed,
+  //   lastCompleted,
+  //   rowIndex,
+  //   wod,
+  // ]);
 
   const handlePress = useCallback(
     (keyCode) => {
@@ -136,6 +135,7 @@ const Kuan = () => {
               keyboardState
             );
             const gameStatus = checkGameStatus(guess, rowIndex, wod);
+            let lastCompletedDate = lastCompleted;
             setKeyboardState(keyboardState);
             setEvaluations([...evaluations]);
             setBoardState([...boardState]);
@@ -143,15 +143,23 @@ const Kuan = () => {
 
             if (gameStatus !== GAME_STATUS.IN_PROGRESS) {
               if (gameStatus === GAME_STATUS.WIN) {
-                setLastCompleted(new Date());
+                lastCompletedDate = new Date();
               }
 
-              toggleStatsModal();
+              setStatsModalState(true);
             } else {
               setRowIndex(boardState.indexOf(''));
             }
 
-            updateGameState();
+            saveGameState({
+              boardState,
+              evaluations,
+              gameStatus,
+              lastPlayed,
+              lastCompleted: lastCompletedDate,
+              rowIndex,
+              wod,
+            });
             setGuess('');
           } else {
             toast.error('Kuan... Wala sa listahan\n(Word not on the list)');
@@ -159,15 +167,7 @@ const Kuan = () => {
         }
       }
     },
-    [
-      evaluations,
-      boardState,
-      guess,
-      rowIndex,
-      updateGameState,
-      toggleStatsModal,
-      wod,
-    ]
+    [evaluations, boardState, guess, lastCompleted, lastPlayed, rowIndex, wod]
   );
 
   const onKeyPress = useCallback(
@@ -185,17 +185,16 @@ const Kuan = () => {
 
   useEffect(() => {
     document.addEventListener('keydown', onKeyPress);
-
     return () => document.removeEventListener('keydown', onKeyPress);
   }, [onKeyPress]);
 
   useEffect(() => {
     // Get local user state
-    const temp = window.localStorage.getItem('gameState');
+    const temp = loadGameState();
 
     if (temp !== null) {
       const tempState = JSON.parse(temp);
-      console.log('localStorage: ', tempState);
+      // console.log('localStorage: ', tempState);
 
       setBoardState(tempState.boardState);
       setEvaluations(tempState.evaluations);
@@ -217,7 +216,7 @@ const Kuan = () => {
       setGameStatus(gameStat);
 
       if (gameStat !== GAME_STATUS.IN_PROGRESS) {
-        toggleStatsModal();
+        setStatsModalState(true);
       }
 
       // KEYBOARD STATE

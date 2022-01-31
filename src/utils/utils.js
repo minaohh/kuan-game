@@ -1,6 +1,6 @@
 import db from '../data/db.json';
 import words from '../data/wod.json';
-import { GAME_STATUS, LANG_CEBUANO } from './constants';
+import { GAME_STATE_KEY, GAME_STATUS, LANG_CEBUANO } from './constants';
 
 export const GAME_MODE = {
   language: LANG_CEBUANO,
@@ -184,3 +184,8 @@ export const checkGameStatus = (guess, rowIndex, wod, mode = GAME_MODE) => {
     ? GAME_STATUS.IN_PROGRESS
     : GAME_STATUS.LOSE;
 };
+
+export const loadGameState = () => window.localStorage.getItem(GAME_STATE_KEY);
+
+export const saveGameState = (state) =>
+  window.localStorage.setItem(GAME_STATE_KEY, JSON.stringify(state));
