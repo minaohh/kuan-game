@@ -13,6 +13,7 @@ import {
   getWordOfTheDay,
 } from '../../utils/utils';
 import { useTheme } from 'next-themes';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import Modal from './Modal';
 import Word from './Word';
