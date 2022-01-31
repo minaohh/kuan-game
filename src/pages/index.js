@@ -124,6 +124,7 @@ const Kuan = () => {
       wod,
     };
     // console.log('newstate ', newState);
+    // console.log(JSON.stringify(newState));
     window.localStorage.setItem(GAME_STATE_STR, JSON.stringify(newState));
   }, [
     // gameState,
@@ -171,9 +172,10 @@ const Kuan = () => {
 
             if (gameStatus !== GAME_STATUS.IN_PROGRESS) {
               toggleStatsModal();
+            } else {
+              setRowIndex(boardState.indexOf(''));
             }
 
-            setRowIndex(boardState.indexOf(''));
             updateGameState();
             setGuess('');
           } else {
@@ -252,10 +254,9 @@ const Kuan = () => {
       // console.log('lastGuess', lastGuess);
       setGameStatus(gameStat);
 
-      // TODO: TOGGLE GAME STATE MODAL
-      // if (tempState.gameStatus !== GAME_STATUS.IN_PROGRESS) {
-      //   toggleStatsModal();
-      // }
+      if (tempState.gameStatus !== GAME_STATUS.IN_PROGRESS) {
+        toggleStatsModal();
+      }
 
       // KEYBOARD STATE
       let tempKeyboard = keyboardStateInit;

@@ -137,6 +137,27 @@ export const lettersCount = (word = getWordOfTheDay(), mode = GAME_MODE) => {
   return letters;
 };
 
+export const calculateTimeLeft = () => {
+  const nextDay = new Date();
+  nextDay.setDate(nextDay.getDate() + 1);
+  nextDay.setHours(0);
+  nextDay.setMinutes(0);
+  nextDay.setSeconds(0);
+  let difference = nextDay - new Date();
+
+  let timeLeft = {};
+
+  if (difference > 0) {
+    timeLeft = {
+      hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+      minutes: Math.floor((difference / 1000 / 60) % 60),
+      seconds: Math.floor((difference / 1000) % 60),
+    };
+  }
+
+  return timeLeft;
+};
+
 // Formats date to yyyy-MM-dd
 export const formatDate = (date) => date.toISOString().slice(0, 10);
 
