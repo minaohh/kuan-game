@@ -308,7 +308,7 @@ const Header = ({
         title="Settings"
         toggle={toggleSettingsModal}
       >
-        <div className="space-y-4 w-52 md:w-80">
+        <div className="space-y-4 w-60 md:w-80">
           <div className="flex items-center justify-between">
             <p>Dark Mode</p>
             <Switch
@@ -325,8 +325,32 @@ const Header = ({
               />
             </Switch>
           </div>
-
-          <div className="flex items-center justify-between pt-4"></div>
+          <div className="flex items-center justify-between">
+            <p>Feedback</p>
+            <div className="space-x-3">
+              <Link href="mailto:teamminjay@gmail.com">
+                <a className="underline" target="_blank">
+                  Email
+                </a>
+              </Link>
+              <Link href="https://twitter.com/TeamMinJay">
+                <a className="underline" target="_blank">
+                  Twitter
+                </a>
+              </Link>
+            </div>
+          </div>
+          <hr />
+          <div className="flex flex-col items-center justify-center text-center">
+            <h1 className="space-x-3 text-3xl font-bold">
+              <span>KUAN</span>
+              <small className="font-mono text-sm text-gray-400">v1.0.0</small>
+            </h1>
+            <p>Kuan game details here</p>
+          </div>
+          <div className="flex items-center justify-between">
+            <h1 className="text-3xl font-bold"></h1>
+          </div>
         </div>
       </Modal>
     </header>
