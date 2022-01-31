@@ -272,7 +272,7 @@ const Header = ({
           )}
 
           {/* Next word */}
-          {gameStatus !== GAME_STATUS.IN_PROGRESS && (
+          {gameStatus === GAME_STATUS.WIN && (
             <div className="flex items-center justify-center space-x-5">
               <div className="flex flex-col">
                 <h1 className="font-semibold ">NEXT KUAN</h1>
