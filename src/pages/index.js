@@ -42,7 +42,7 @@ const INIT_GAME_STATE = {
   boardState: INIT_BOARD_STATE,
   evaluations: new Array(INIT_BOARD_STATE.length),
   gameStatus: GAME_STATUS.IN_PROGRESS,
-  lastPlayed: new Date(),
+  lastPlayed: null,
   lastCompleted: null,
   rowIndex: 0,
   // keyboardState: getKeyboardState(),
