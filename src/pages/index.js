@@ -15,14 +15,18 @@ import {
   saveGameState,
   formatDate,
 } from '../utils/utils';
-import { GAME_STATUS } from '../utils/constants';
+import {
+  GAME_STATE_KEY,
+  GAME_STATISTICS_KEY,
+  GAME_STATUS,
+} from '../utils/constants';
 import toast, { Toaster } from 'react-hot-toast';
 
 // Initial values
 export const INIT_BOARD_STATE = ['', '', '', '', '', ''];
 const INIT_WOD = getWordOfTheDay();
 
-const statistics = {
+const STATISTICS = {
   currentStreak: 0,
   gamesPlayed: 0,
   gamesWon: 0,
@@ -62,7 +66,7 @@ const Kuan = () => {
   );
   const [wod, setWod] = useState(INIT_GAME_STATE.wod);
   // Stats
-  const [stats, setStats] = useState(statistics);
+  const [statistics, setStatistics] = useState(STATISTICS);
   // Modal State
   const [showSettingsModal, setSettingsModalState] = useState(false);
   const [showStatsModal, setStatsModalState] = useState(false);
@@ -115,17 +119,36 @@ const Kuan = () => {
             setBoardState([...boardState]);
             setGameStatus(gameStatus);
 
-            if (gameStatus !== GAME_STATUS.IN_PROGRESS) {
+            if (
+              gameStatus !== GAME_STATUS.IN_PROGRESS ||
+              rowIndex === boardState.length - 1
+            ) {
               if (gameStatus === GAME_STATUS.WIN) {
                 lastCompletedDate = new Date();
+                statistics.guesses[`${rowIndex + 1}`]++;
+                statistics.gamesWon++;
+                statistics.currentStreak++;
+              } else {
+                statistics.currentStreak = 0;
+                statistics.guesses.fail++;
               }
 
+              if (statistics.maxStreak < statistics.currentStreak) {
+                statistics.maxStreak = statistics.currentStreak;
+              }
+
+              statistics.gamesPlayed++;
+              statistics.winPercentage = Math.floor(
+                (statistics.gamesWon / statistics.gamesPlayed) * 100
+              );
+              saveGameState(GAME_STATISTICS_KEY, { ...statistics });
+              setStatistics({ ...statistics });
               setStatsModalState(true);
             } else {
               setRowIndex(boardState.indexOf(''));
             }
 
-            saveGameState({
+            saveGameState(GAME_STATE_KEY, {
               boardState,
               evaluations,
               gameStatus,
@@ -141,7 +164,7 @@ const Kuan = () => {
         }
       }
     },
-    [evaluations, boardState, guess, lastCompleted, rowIndex, wod]
+    [evaluations, boardState, guess, lastCompleted, statistics, rowIndex, wod]
   );
 
   const onKeyPress = useCallback(
@@ -164,10 +187,11 @@ const Kuan = () => {
 
   useEffect(() => {
     // Load user info from local storage
-    const tempGameState = loadGameState();
+    const tempGameState = loadGameState(GAME_STATE_KEY);
+    const statistics = loadGameState(GAME_STATISTICS_KEY);
 
     if (tempGameState !== null) {
-      const storage = JSON.parse(tempGameState);
+      const storage = tempGameState;
 
       // Check if we need to reset (new day)
       let reset =
@@ -208,6 +232,10 @@ const Kuan = () => {
         });
         setKeyboardState(tempKeyboard);
       }
+    }
+
+    if (statistics !== null) {
+      setStatistics({ ...statistics });
     }
   }, []);
 
