@@ -167,13 +167,13 @@ export const getWordDictLink = (wod = getWordOfTheDay(), mode = GAME_MODE) => {
   return `https://${mode.language}.pinoydictionary.com/word/${wod}/`;
 };
 
-export const checkGameStatus = (guess, rowIndex, wod, size) => {
+export const checkGameStatus = (guess, rowIndex, wod, mode = GAME_MODE) => {
   // console.log('guess', answer);
   // console.log('stat', answer.toLowerCase() === wod.toLowerCase());
 
   return guess.toLowerCase() === wod.toLowerCase()
     ? GAME_STATUS.WIN
-    : rowIndex < size
+    : rowIndex < mode.length + 1
     ? GAME_STATUS.IN_PROGRESS
     : GAME_STATUS.LOSE;
 };

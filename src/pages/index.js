@@ -163,18 +163,11 @@ const Kuan = () => {
               evaluation,
               keyboardState
             );
-            const gameStatus = checkGameStatus(
-              guess,
-              rowIndex,
-              wod,
-              INIT_BOARD_STATE.length
-            );
+            const gameStatus = checkGameStatus(guess, rowIndex, wod);
             setKeyboardState(keyboardState);
             setEvaluations([...evaluations]);
             setBoardState([...boardState]);
             setGameStatus(gameStatus);
-
-            // const lastGuess = boardState.indexOf('') - 1;
 
             if (gameStatus !== GAME_STATUS.IN_PROGRESS) {
               toggleStatsModal();
@@ -239,13 +232,29 @@ const Kuan = () => {
     if (temp !== null) {
       const tempState = JSON.parse(temp);
       // setGameState({ ...tempState });
-      setGameStatus(tempState.gameStatus);
+      // setGameStatus(tempState.gameStatus);
       setBoardState(tempState.boardState);
       setEvaluations(tempState.evaluations);
       setLastPlayed(tempState.lastPlayed);
       setLastCompleted(tempState.lastCompleted);
-      setRowIndex(tempState.rowIndex + 1);
+
+      const newRow = tempState.rowIndex + 1;
+      setRowIndex(newRow);
       setWod(tempState.wod);
+
+      // GAME STATE
+      const lastGuessIdx = tempState.boardState.indexOf('') - 1;
+      // console.log('lastGuessIdx', lastGuessIdx);
+      const lastGuess =
+        lastGuessIdx >= 0 ? tempState.boardState[lastGuessIdx] : '';
+      const gameStat = checkGameStatus(lastGuess, newRow, tempState.wod);
+      // console.log('gameStat', gameStat);
+      // console.log('lastGuess', lastGuess);
+      setGameStatus(gameStat);
+
+      if (tempState.gameStatus !== GAME_STATUS.IN_PROGRESS) {
+        toggleStatsModal();
+      }
 
       // let i = 0;
       // while (boardState[i] !== '') {
@@ -254,12 +263,8 @@ const Kuan = () => {
       //   );
       //   i++;
       // }
-
-      if (gameStatus !== GAME_STATUS.IN_PROGRESS) {
-        toggleStatsModal();
-      }
     }
-  }, [gameStatus, toggleStatsModal]);
+  }, [toggleStatsModal]);
 
   return (
     <>
