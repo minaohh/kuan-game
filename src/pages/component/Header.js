@@ -45,41 +45,38 @@ const Header = ({
   });
 
   useEffect(() => {
+    const max = Math.max(
+      gameStats.guesses['1'],
+      gameStats.guesses['2'],
+      gameStats.guesses['3'],
+      gameStats.guesses['4'],
+      gameStats.guesses['5'],
+      gameStats.guesses['6']
+    );
+
     const guesses = [];
     guesses.push({
-      percentage: Math.floor(
-        (gameStats.guesses['1'] / gameStats.gamesWon) * 100
-      ),
+      percentage: Math.floor((gameStats.guesses['1'] / max) * 100),
       value: gameStats.guesses['1'],
     });
     guesses.push({
-      percentage: Math.floor(
-        (gameStats.guesses['2'] / gameStats.gamesWon) * 100
-      ),
+      percentage: Math.floor((gameStats.guesses['2'] / max) * 100),
       value: gameStats.guesses['2'],
     });
     guesses.push({
-      percentage: Math.floor(
-        (gameStats.guesses['3'] / gameStats.gamesWon) * 100
-      ),
+      percentage: Math.floor((gameStats.guesses['3'] / max) * 100),
       value: gameStats.guesses['3'],
     });
     guesses.push({
-      percentage: Math.floor(
-        (gameStats.guesses['4'] / gameStats.gamesWon) * 100
-      ),
+      percentage: Math.floor((gameStats.guesses['4'] / max) * 100),
       value: gameStats.guesses['4'],
     });
     guesses.push({
-      percentage: Math.floor(
-        (gameStats.guesses['5'] / gameStats.gamesWon) * 100
-      ),
+      percentage: Math.floor((gameStats.guesses['5'] / max) * 100),
       value: gameStats.guesses['5'],
     });
     guesses.push({
-      percentage: Math.floor(
-        (gameStats.guesses['6'] / gameStats.gamesWon) * 100
-      ),
+      percentage: Math.floor((gameStats.guesses['6'] / max) * 100),
       value: gameStats.guesses['6'],
     });
     setGuesses([...guesses]);
