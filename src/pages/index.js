@@ -47,21 +47,8 @@ const INIT_GAME_STATE = {
   wod: INIT_WOD,
 };
 
-const tests = () => {
-  // console.log('word of the day : ', getWordOfTheDay());
-  // console.log('word link: ', getWordDictLink(INIT_WOD));
-  // const guess = 'LIHOK'; // wod: hilom, guess: lihok, nipis
-  // console.log('Guess: ', guess);
-  // console.log('lettersCount: ', lettersCount());
-  // console.log('is guess in dictionary? ', isWordValid(guess));
-  // let result = checkWord(guess);
-  // console.log('result: ', result);
-  // console.log('keyboard: ', getKeyboardState(guess, result));
-};
-
 const Kuan = () => {
   // Game State
-  // const [gameState, setGameState] = useState(INIT_GAME_STATE);
   const [evaluations, setEvaluations] = useState(INIT_GAME_STATE.evaluations);
   const [boardState, setBoardState] = useState(INIT_GAME_STATE.boardState);
   const [gameStatus, setGameStatus] = useState(INIT_GAME_STATE.gameStatus);
@@ -127,7 +114,6 @@ const Kuan = () => {
     // console.log(JSON.stringify(newState));
     window.localStorage.setItem(GAME_STATE_STR, JSON.stringify(newState));
   }, [
-    // gameState,
     boardState,
     evaluations,
     gameStatus,
@@ -195,17 +181,6 @@ const Kuan = () => {
     ]
   );
 
-  // const updateGameStatus = useCallback(
-  //   (gameStat = gameStatus) => {
-  //     setGameStatus(gameStat);
-
-  //     if (gameStatus !== GAME_STATUS.IN_PROGRESS) {
-  //       toggleStatsModal();
-  //     }
-  //   },
-  //   [toggleStatsModal, gameStatus]
-  // );
-
   const onKeyPress = useCallback(
     (event) => {
       if (isGameInProgress) {
@@ -233,8 +208,6 @@ const Kuan = () => {
       const tempState = JSON.parse(temp);
       console.log('localStorage: ', tempState);
 
-      // setGameState({ ...tempState });
-      // setGameStatus(tempState.gameStatus);
       setBoardState(tempState.boardState);
       setEvaluations(tempState.evaluations);
       setLastPlayed(tempState.lastPlayed);
@@ -244,7 +217,7 @@ const Kuan = () => {
       setRowIndex(newRow);
       setWod(tempState.wod);
 
-      // GAME STATE
+      // GAME STATUS
       const lastGuessIdx = tempState.boardState.indexOf('') - 1;
       // console.log('lastGuessIdx', lastGuessIdx);
       const lastGuess =
