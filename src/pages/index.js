@@ -254,7 +254,7 @@ const Kuan = () => {
       // console.log('lastGuess', lastGuess);
       setGameStatus(gameStat);
 
-      if (tempState.gameStatus !== GAME_STATUS.IN_PROGRESS) {
+      if (gameStat !== GAME_STATUS.IN_PROGRESS) {
         toggleStatsModal();
       }
 

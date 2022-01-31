@@ -200,10 +200,10 @@ const Header = ({
               </h1>
               <button
                 onClick={() => window.open(getWordDictLink(wordOfTheDay))}
-                className="flex flex-row px-4 py-2 text-white align-middle bg-indigo-500 rounded"
+                className="inline-flex items-center h-8 text-sm px-5 text-white transition-colors align-middle duration-150 bg-indigo-500 rounded-lg focus:shadow-outline hover:bg-indigo-800"
               >
                 <span>View Definition</span>
-                <ExternalLinkIcon className="w-6 h-6 ml-2" />
+                <ExternalLinkIcon className="w-4 h-4 ml-2" />
               </button>
             </div>
           )}
@@ -222,9 +222,9 @@ const Header = ({
             <div className="">
               <button
                 onClick={() => {}}
-                className="flex flex-row px-4 py-2 text-white align-middle bg-green-600 rounded"
+                className="inline-flex h-14 px-5 m-2 text-white items-center transition-colors duration-150 bg-green-600 rounded-lg focus:shadow-outline hover:bg-green-900"
               >
-                <span className="text-base font-semibold md:text-xl">
+                <span className="text-base font-semibold md:text-3xl">
                   SHARE
                 </span>
                 <ShareIcon className="w-6 h-6 ml-2" />
