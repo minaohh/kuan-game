@@ -68,8 +68,8 @@ export const keyboardStateInit = {
 // Returns the word of the day in the chosen language (string)
 export const getWordOfTheDay = (mode = GAME_MODE) => {
   let today = formatDate(new Date());
-  return 'ngano';
-  // return words[today][mode.language];
+  // return 'ngano';
+  return words[today][mode.language];
 };
 
 // Check if the word is in the dictionary
@@ -85,22 +85,44 @@ export const checkWord = (word, mode = GAME_MODE) => {
   word = word.toLowerCase();
   const ans = getWordOfTheDay().split('');
   const guess = word.split('');
-  let res = [];
+  let res = ['', '', '', '', ''];
   let code = '';
   let letters = lettersCount();
 
-  for (let i = 0; i < guess.length; i++) {
-    if (guess[i] === ans[i] && letters[guess[i]] > 0) {
-      code = 'correct';
-      letters[guess[i]]--;
-    } else if (ans.includes(guess[i]) && letters[guess[i]] > 0) {
-      code = 'present';
-    } else {
-      code = 'absent';
+  // Check green first so there's no duplicates
+  guess.forEach((val, i) => {
+    if (val === ans[i] && letters[val] > 0) {
+      res[i] = 'correct';
+      letters[val]--;
     }
+  });
+  console.log('checkgreen - ', res);
 
-    res.push(code);
-  }
+  // Check the rest
+  guess.forEach((val, i) => {
+    if (res[i] != 'correct') {
+      if (ans.includes(val) && letters[val] > 0) {
+        res[i] = 'present';
+        letters[val]--;
+      } else {
+        res[i] = 'absent';
+      }
+    }
+  });
+
+  console.log('check all', res);
+  // for (let i = 0; i < guess.length; i++) {
+  //   if (guess[i] === ans[i] && letters[guess[i]] > 0) {
+  //     code = 'correct';
+  //     letters[guess[i]]--;
+  //   } else if (ans.includes(guess[i]) && letters[guess[i]] > 0) {
+  //     code = 'present';
+  //   } else {
+  //     code = 'absent';
+  //   }
+
+  //   res.push(code);
+  // }
 
   return res;
 };

@@ -16,7 +16,7 @@ import { GAME_STATE_STR, GAME_STATUS } from '../utils/constants';
 import toast, { Toaster } from 'react-hot-toast';
 
 // Initial values
-const INIT_BOARD_STATE = ['', '', '', '', '', ''];
+export const INIT_BOARD_STATE = ['', '', '', '', '', ''];
 const INIT_WOD = getWordOfTheDay();
 
 const statistics = {
