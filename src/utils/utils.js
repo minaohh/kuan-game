@@ -189,3 +189,14 @@ export const loadGameState = () => window.localStorage.getItem(GAME_STATE_KEY);
 
 export const saveGameState = (state) =>
   window.localStorage.setItem(GAME_STATE_KEY, JSON.stringify(state));
+
+// GAME STATUS workaround
+// const lastGuessIdx = tempState.boardState.indexOf('') - 1;
+// const lastGuess =
+//   lastGuessIdx >= 0 ? tempState.boardState[lastGuessIdx] : '';
+// const gameStat = checkGameStatus(lastGuess, newRow, tempState.wod);
+// setGameStatus(gameStat);
+
+// if (gameStat !== GAME_STATUS.IN_PROGRESS) {
+//   setStatsModalState(true);
+// }

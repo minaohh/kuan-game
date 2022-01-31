@@ -13,6 +13,7 @@ import {
   keyboardStateInit,
   loadGameState,
   saveGameState,
+  formatDate,
 } from '../utils/utils';
 import { GAME_STATUS } from '../utils/constants';
 import toast, { Toaster } from 'react-hot-toast';
@@ -79,33 +80,6 @@ const Kuan = () => {
     !showHowModal &&
     !showSettingsModal &&
     !showStatsModal;
-
-  // const updateGameState = useCallback(() => {
-  // console.log('gameStatus', checkGameStatus());
-  // console.log('rowIndex', rowIndex);
-
-  // const newState = {
-  //   // ...gameState,
-  //   boardState,
-  //   evaluations,
-  //   gameStatus,
-  //   lastPlayed,
-  //   lastCompleted,
-  //   rowIndex,
-  //   wod,
-  // };
-  // console.log('newstate ', newState);
-  // console.log(JSON.stringify(newState));
-  // window.localStorage.setItem(GAME_STATE_KEY, JSON.stringify(newState));
-  // }, [
-  //   boardState,
-  //   evaluations,
-  //   gameStatus,
-  //   lastPlayed,
-  //   lastCompleted,
-  //   rowIndex,
-  //   wod,
-  // ]);
 
   const handlePress = useCallback(
     (keyCode) => {
@@ -189,52 +163,51 @@ const Kuan = () => {
   }, [onKeyPress]);
 
   useEffect(() => {
-    // Get local user state
-    const temp = loadGameState();
+    // Load user info from local storage
+    const tempGameState = loadGameState();
 
-    if (temp !== null) {
-      const tempState = JSON.parse(temp);
-      // console.log('localStorage: ', tempState);
+    if (tempGameState !== null) {
+      const storage = JSON.parse(tempGameState);
 
-      setBoardState(tempState.boardState);
-      setEvaluations(tempState.evaluations);
-      setLastPlayed(tempState.lastPlayed);
-      setLastCompleted(tempState.lastCompleted);
+      // Check if we need to reset (new day)
+      let reset =
+        storage.lastPlayed &&
+        storage.lastPlayed.slice(0, 10) !== formatDate(new Date());
 
-      const newRow = tempState.rowIndex + 1;
-      setRowIndex(newRow);
-      setWod(tempState.wod);
+      setLastPlayed(storage.lastPlayed);
+      setLastCompleted(storage.lastCompleted);
 
-      // GAME STATUS
-      const lastGuessIdx = tempState.boardState.indexOf('') - 1;
-      // console.log('lastGuessIdx', lastGuessIdx);
-      const lastGuess =
-        lastGuessIdx >= 0 ? tempState.boardState[lastGuessIdx] : '';
-      const gameStat = checkGameStatus(lastGuess, newRow, tempState.wod);
-      // console.log('gameStat', gameStat);
-      // console.log('lastGuess', lastGuess);
-      setGameStatus(gameStat);
+      if (reset) {
+        // new word for a new day
+        setWod(getWordOfTheDay());
+      } else {
+        setBoardState(storage.boardState);
+        setEvaluations(storage.evaluations);
 
-      if (gameStat !== GAME_STATUS.IN_PROGRESS) {
-        setStatsModalState(true);
-      }
-
-      // KEYBOARD STATE
-      let tempKeyboard = keyboardStateInit;
-      tempState.boardState.forEach((val, i) => {
-        if (val !== '') {
-          let kbs = getKeyboardState(
-            val,
-            tempState.evaluations[i],
-            tempKeyboard
-          );
-          // console.log('val', val);
-          // console.log('i', tempState.evaluations[i]);
-          tempKeyboard = kbs;
+        // Game Status
+        setGameStatus(storage.gameStatus);
+        if (storage.gameStatus !== GAME_STATUS.IN_PROGRESS) {
+          setStatsModalState(true);
         }
-      });
-      // console.log('tempKeyboard', tempKeyboard);
-      setKeyboardState(tempKeyboard);
+
+        const newRow = storage.rowIndex + 1;
+        setRowIndex(newRow);
+        setWod(storage.wod);
+
+        // KEYBOARD STATE
+        let tempKeyboard = keyboardStateInit;
+        storage.boardState.forEach((val, i) => {
+          if (val !== '') {
+            let kbs = getKeyboardState(
+              val,
+              storage.evaluations[i],
+              tempKeyboard
+            );
+            tempKeyboard = kbs;
+          }
+        });
+        setKeyboardState(tempKeyboard);
+      }
     }
   }, []);
 
