@@ -2,11 +2,11 @@ import { useCallback, useEffect, useState } from 'react';
 
 import Header from './component/Header';
 import Keyboard from './component/Keyboard';
+import Meta from './component/Meta';
 import Word from './component/Word';
 import {
   checkWord,
   getKeyboardState,
-  getWordDictLink,
   getWordOfTheDay,
   isWordValid,
   checkGameStatus,
@@ -277,6 +277,7 @@ const Kuan = () => {
 
   return (
     <>
+      <Meta />
       <Toaster position="top-left" />
       <main className="container flex flex-col justify-between mx-auto md:w-[500px] md:h-screen w-screen space-y-5">
         <Header
