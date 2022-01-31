@@ -29,6 +29,7 @@ const Header = ({
   const { theme, setTheme } = useTheme();
   const [enabled, setEnabled] = useState(theme === 'dark');
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+  const [guesses, setGuesses] = useState([]);
 
   const toggleTheme = () => {
     setEnabled(theme !== 'dark');
@@ -42,6 +43,48 @@ const Header = ({
 
     return () => clearTimeout(timer);
   });
+
+  useEffect(() => {
+    const guesses = [];
+    guesses.push({
+      percentage: Math.floor(
+        (gameStats.guesses['1'] / gameStats.gamesWon) * 100
+      ),
+      value: gameStats.guesses['1'],
+    });
+    guesses.push({
+      percentage: Math.floor(
+        (gameStats.guesses['2'] / gameStats.gamesWon) * 100
+      ),
+      value: gameStats.guesses['2'],
+    });
+    guesses.push({
+      percentage: Math.floor(
+        (gameStats.guesses['3'] / gameStats.gamesWon) * 100
+      ),
+      value: gameStats.guesses['3'],
+    });
+    guesses.push({
+      percentage: Math.floor(
+        (gameStats.guesses['4'] / gameStats.gamesWon) * 100
+      ),
+      value: gameStats.guesses['4'],
+    });
+    guesses.push({
+      percentage: Math.floor(
+        (gameStats.guesses['5'] / gameStats.gamesWon) * 100
+      ),
+      value: gameStats.guesses['5'],
+    });
+    guesses.push({
+      percentage: Math.floor(
+        (gameStats.guesses['6'] / gameStats.gamesWon) * 100
+      ),
+      value: gameStats.guesses['6'],
+    });
+    setGuesses([...guesses]);
+    console.log(guesses);
+  }, [gameStats]);
 
   return (
     <header className="flex items-center justify-between p-1 border-b">
@@ -187,61 +230,22 @@ const Header = ({
           {/* Graph */}
           <div className="flex flex-col">
             <h3 className="text-lg font-bold">Guess Distribution</h3>
-            <div className="flex flex-col items-start justify-center space-y-1 font-mono text-sm text-left ">
-              <div className="flex flex-row w-full space-x-1">
-                <p>1</p>
-                <div
-                  className="px-1 text-white bg-gray-600"
-                  style={{ minWidth: '10%', width: null }}
-                >
-                  <span>0</span>
+            <div className="flex flex-col items-start justify-center space-y-1 font-mono text-sm text-right">
+              {guesses.map((guess, index) => (
+                <div key={index} className="flex flex-row w-full space-x-1">
+                  <p>{index + 1}</p>
+                  <div
+                    className="px-1 text-white bg-gray-600"
+                    style={{
+                      minWidth: '10%',
+                      width:
+                        guess.percentage > 10 ? `${guess.percentage}%` : null,
+                    }}
+                  >
+                    <span>{guess.value}</span>
+                  </div>
                 </div>
-              </div>
-              <div className="flex flex-row space-x-1">
-                <p>2</p>
-                <div
-                  className="px-1 text-white bg-gray-600"
-                  style={{ minWidth: '10%', width: null }}
-                >
-                  <span>0</span>
-                </div>
-              </div>
-              <div className="flex flex-row space-x-1">
-                <p>3</p>
-                <div
-                  className="px-1 text-white bg-gray-600"
-                  style={{ minWidth: '10%', width: null }}
-                >
-                  <span>0</span>
-                </div>
-              </div>
-              <div className="flex flex-row space-x-1">
-                <p>4</p>
-                <div
-                  className="px-1 text-white bg-gray-600"
-                  style={{ minWidth: '10%', width: null }}
-                >
-                  <span>0</span>
-                </div>
-              </div>
-              <div className="flex flex-row space-x-1">
-                <p>5</p>
-                <div
-                  className="px-1 text-white bg-gray-600"
-                  style={{ minWidth: '10%', width: null }}
-                >
-                  <span>0</span>
-                </div>
-              </div>
-              <div className="flex flex-row space-x-1">
-                <p>6</p>
-                <div
-                  className="px-1 text-white bg-gray-600"
-                  style={{ minWidth: '10%', width: null }}
-                >
-                  <span>0</span>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
 
@@ -279,7 +283,7 @@ const Header = ({
                 onClick={() => {}}
                 className="inline-flex items-center px-5 m-2 text-white transition-colors duration-150 bg-green-600 rounded-lg h-14 focus:shadow-outline hover:bg-green-900"
               >
-                <span className="font-semibold text-3xl">SHARE</span>
+                <span className="text-3xl font-semibold">SHARE</span>
                 <ShareIcon className="w-8 h-8 ml-2" />
               </button>
             </div>

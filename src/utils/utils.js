@@ -185,7 +185,7 @@ export const checkGameStatus = (guess, rowIndex, wod, mode = GAME_MODE) => {
     : GAME_STATUS.LOSE;
 };
 
-export const loadGameState = () => window.localStorage.getItem(GAME_STATE_KEY);
+export const loadGameState = (key) => window.localStorage.getItem(key);
 
-export const saveGameState = (state) =>
-  window.localStorage.setItem(GAME_STATE_KEY, JSON.stringify(state));
+export const saveGameState = (key, value) =>
+  window.localStorage.setItem(key, JSON.stringify(value));

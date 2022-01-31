@@ -14,14 +14,18 @@ import {
   loadGameState,
   saveGameState,
 } from '../utils/utils';
-import { GAME_STATUS } from '../utils/constants';
+import {
+  GAME_STATE_KEY,
+  GAME_STATISTICS_KEY,
+  GAME_STATUS,
+} from '../utils/constants';
 import toast, { Toaster } from 'react-hot-toast';
 
 // Initial values
 export const INIT_BOARD_STATE = ['', '', '', '', '', ''];
 const INIT_WOD = getWordOfTheDay();
 
-const statistics = {
+const STATISTICS = {
   currentStreak: 0,
   gamesPlayed: 0,
   gamesWon: 0,
@@ -61,7 +65,7 @@ const Kuan = () => {
   );
   const [wod, setWod] = useState(INIT_GAME_STATE.wod);
   // Stats
-  const [stats, setStats] = useState(statistics);
+  const [statistics, setStatistics] = useState(STATISTICS);
   // Modal State
   const [showSettingsModal, setSettingsModalState] = useState(false);
   const [showStatsModal, setStatsModalState] = useState(false);
@@ -79,33 +83,6 @@ const Kuan = () => {
     !showHowModal &&
     !showSettingsModal &&
     !showStatsModal;
-
-  // const updateGameState = useCallback(() => {
-  // console.log('gameStatus', checkGameStatus());
-  // console.log('rowIndex', rowIndex);
-
-  // const newState = {
-  //   // ...gameState,
-  //   boardState,
-  //   evaluations,
-  //   gameStatus,
-  //   lastPlayed,
-  //   lastCompleted,
-  //   rowIndex,
-  //   wod,
-  // };
-  // console.log('newstate ', newState);
-  // console.log(JSON.stringify(newState));
-  // window.localStorage.setItem(GAME_STATE_KEY, JSON.stringify(newState));
-  // }, [
-  //   boardState,
-  //   evaluations,
-  //   gameStatus,
-  //   lastPlayed,
-  //   lastCompleted,
-  //   rowIndex,
-  //   wod,
-  // ]);
 
   const handlePress = useCallback(
     (keyCode) => {
@@ -141,17 +118,25 @@ const Kuan = () => {
             setBoardState([...boardState]);
             setGameStatus(gameStatus);
 
-            if (gameStatus !== GAME_STATUS.IN_PROGRESS) {
+            if (
+              gameStatus !== GAME_STATUS.IN_PROGRESS ||
+              rowIndex === boardState.length - 1
+            ) {
               if (gameStatus === GAME_STATUS.WIN) {
                 lastCompletedDate = new Date();
+                statistics.guesses[`${rowIndex + 1}`]++;
+                statistics.gamesWon++;
+              } else {
+                statistics.guesses.fail++;
               }
 
+              saveGameState(GAME_STATISTICS_KEY, { ...statistics });
               setStatsModalState(true);
             } else {
               setRowIndex(boardState.indexOf(''));
             }
 
-            saveGameState({
+            saveGameState(GAME_STATE_KEY, {
               boardState,
               evaluations,
               gameStatus,
@@ -167,7 +152,7 @@ const Kuan = () => {
         }
       }
     },
-    [evaluations, boardState, guess, lastCompleted, rowIndex, wod]
+    [evaluations, boardState, guess, lastCompleted, statistics, rowIndex, wod]
   );
 
   const onKeyPress = useCallback(
@@ -190,7 +175,8 @@ const Kuan = () => {
 
   useEffect(() => {
     // Get local user state
-    const temp = loadGameState();
+    const temp = loadGameState(GAME_STATE_KEY);
+    const statistics = loadGameState(GAME_STATISTICS_KEY);
 
     if (temp !== null) {
       const tempState = JSON.parse(temp);
@@ -235,6 +221,10 @@ const Kuan = () => {
       });
       // console.log('tempKeyboard', tempKeyboard);
       setKeyboardState(tempKeyboard);
+    }
+
+    if (statistics !== null) {
+      setStatistics(JSON.parse(statistics));
     }
   }, []);
 
