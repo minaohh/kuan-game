@@ -74,27 +74,12 @@ const Kuan = () => {
     () => setStatsModalState(!showStatsModal),
     [showStatsModal]
   );
+
   const isGameInProgress =
     gameStatus === GAME_STATUS.IN_PROGRESS &&
     !showHowModal &&
     !showSettingsModal &&
     !showStatsModal;
-
-  // tests();
-
-  // const checkGameStatus = useCallback(
-  //   (guess, rowIndex, wod) => {
-  //     // console.log('guess', answer);
-  //     // console.log('stat', answer.toLowerCase() === wod.toLowerCase());
-
-  //     return guess.toLowerCase() === wod.toLowerCase()
-  //       ? GAME_STATUS.WIN
-  //       : rowIndex < INIT_BOARD_STATE.length
-  //       ? GAME_STATUS.IN_PROGRESS
-  //       : GAME_STATUS.LOSE;
-  //   },
-  //   [guess, rowIndex, wod]
-  // );
 
   const updateGameState = useCallback(() => {
     // console.log('gameStatus', checkGameStatus());
@@ -157,6 +142,10 @@ const Kuan = () => {
             setGameStatus(gameStatus);
 
             if (gameStatus !== GAME_STATUS.IN_PROGRESS) {
+              if (gameStatus === GAME_STATUS.WIN) {
+                setLastCompleted(new Date());
+              }
+
               toggleStatsModal();
             } else {
               setRowIndex(boardState.indexOf(''));
@@ -240,12 +229,12 @@ const Kuan = () => {
             tempState.evaluations[i],
             tempKeyboard
           );
-          console.log('val', val);
-          console.log('i', tempState.evaluations[i]);
+          // console.log('val', val);
+          // console.log('i', tempState.evaluations[i]);
           tempKeyboard = kbs;
         }
       });
-      console.log('tempKeyboard', tempKeyboard);
+      // console.log('tempKeyboard', tempKeyboard);
       setKeyboardState(tempKeyboard);
     }
   }, []);
