@@ -212,15 +212,21 @@ const Header = ({
         <div className="flex flex-col items-center space-y-5 text-center">
           <div className="flex flex-row space-x-6">
             <div className="flex flex-col">
-              <span className="text-4xl">{gameStats.gamesPlayed}</span>
+              <span className="text-2xl md:text-4xl">
+                {gameStats.gamesPlayed}
+              </span>
               <span className="text-xs font-light">Played</span>
             </div>
             <div className="flex flex-col">
-              <span className="text-4xl">{gameStats.winPercentage}</span>
+              <span className="text-2xl md:text-4xl">
+                {gameStats.winPercentage}
+              </span>
               <span className="text-xs font-light">Win %</span>
             </div>
             <div className="flex flex-col">
-              <span className="text-4xl">{gameStats.currentStreak}</span>
+              <span className="text-2xl md:text-4xl">
+                {gameStats.currentStreak}
+              </span>
               <span className="text-xs font-light">
                 Current
                 <br />
@@ -228,7 +234,9 @@ const Header = ({
               </span>
             </div>
             <div className="flex flex-col">
-              <span className="text-4xl">{gameStats.maxStreak}</span>
+              <span className="text-2xl md:text-4xl">
+                {gameStats.maxStreak}
+              </span>
               <span className="text-xs font-light">
                 Max
                 <br />
@@ -262,7 +270,7 @@ const Header = ({
           {/* Word definition */}
           {gameStatus !== GAME_STATUS.IN_PROGRESS && (
             <div className="flex flex-col">
-              <h1 className="font-mono text-4xl font-normal tracking-widest">
+              <h1 className="font-mono text-2xl font-normal tracking-widest md:text-4xl">
                 {wordOfTheDay.toUpperCase()}
               </h1>
               <Link href={getWordDictLink(wordOfTheDay)}>
@@ -282,7 +290,7 @@ const Header = ({
             <div className="flex items-center justify-center space-x-5">
               <div className="flex flex-col">
                 <h1 className="font-semibold ">NEXT KUAN</h1>
-                <h1 className="font-mono text-3xl tracking-wider md:text-4xl">
+                <h1 className="font-mono text-xl tracking-wider md:text-4xl">
                   {`${timeLeft.hours < 10 ? '0' : ''}${timeLeft.hours}`}:
                   {`${timeLeft.minutes < 10 ? '0' : ''}${timeLeft.minutes}`}:
                   {`${timeLeft.seconds < 10 ? '0' : ''}${timeLeft.seconds}`}
@@ -300,8 +308,10 @@ const Header = ({
                     // onClick={share}
                     className="inline-flex items-center px-5 m-2 text-white transition-colors duration-150 bg-green-600 rounded-lg h-14 focus:shadow-outline hover:bg-green-900"
                   >
-                    <span className="text-3xl font-semibold">SHARE</span>
-                    <ShareIcon className="w-8 h-8 ml-2" />
+                    <span className="text-xl font-semibold md:text-3xl">
+                      SHARE
+                    </span>
+                    <ShareIcon className="w-5 h-5 ml-2 md:w-8 md:h-8" />
                   </button>
                 </CopyToClipboard>
               </div>
