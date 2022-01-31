@@ -18,6 +18,7 @@ import Modal from './Modal';
 import Word from './Word';
 import { GAME_STATUS } from '../../utils/constants';
 import { calculateTimeLeft } from '../../utils/utils';
+import Link from 'next/link';
 
 const Header = ({
   showHowModal,
@@ -90,9 +91,9 @@ const Header = ({
 
   return (
     <header className="flex items-center justify-between p-1 border-b">
-      <button onClick={toggleHowModal}>
+      <a className="cursor-pointer" onClick={toggleHowModal}>
         <QuestionMarkCircleIcon className="w-6 h-6 dark:text-white" />
-      </button>
+      </a>
       <h1 className="flex flex-col items-center justify-center pl-12 text-4xl leading-8 dark:text-gray-100">
         <span className="font-extrabold">KUAN</span>
         <span className="text-sm font-light text-center ">
@@ -107,12 +108,12 @@ const Header = ({
         </span>
       </h1>
       <div className="flex space-x-5">
-        <button onClick={toggleStatsModal}>
+        <a className="cursor-pointer" onClick={toggleStatsModal}>
           <ChartBarIcon className="w-6 h-6 dark:text-white" />
-        </button>
-        <button onClick={toggleSettingsModal}>
+        </a>
+        <a className="cursor-pointer" onClick={toggleSettingsModal}>
           <CogIcon className="w-6 h-6 dark:text-white" />
-        </button>
+        </a>
       </div>
 
       {/* How to Play modal dialog */}
@@ -251,53 +252,52 @@ const Header = ({
             </div>
           </div>
 
-          <hr />
-
           {/* Word definition */}
           {gameStatus !== GAME_STATUS.IN_PROGRESS && (
-            <>
-              <div className="flex flex-col">
-                <h1 className="font-mono text-4xl font-normal tracking-widest">
-                  {wordOfTheDay.toUpperCase()}
-                </h1>
-                <button
-                  onClick={() => window.open(getWordDictLink(wordOfTheDay))}
-                  className="inline-flex items-center h-8 px-5 text-sm text-white align-middle transition-colors duration-150 bg-indigo-500 rounded-lg focus:shadow-outline hover:bg-indigo-800"
+            <div className="flex flex-col">
+              <h1 className="font-mono text-4xl font-normal tracking-widest">
+                {wordOfTheDay.toUpperCase()}
+              </h1>
+              <Link href={getWordDictLink(wordOfTheDay)}>
+                <a
+                  className="inline-flex items-center h-8 px-5 text-sm text-white align-middle transition-colors duration-150 bg-indigo-500 rounded-lg hover:bg-indigo-800"
+                  target="_blank"
                 >
                   <span>View Definition</span>
                   <ExternalLinkIcon className="w-4 h-4 ml-2" />
+                </a>
+              </Link>
+            </div>
+          )}
+
+          {/* Next word */}
+          {gameStatus !== GAME_STATUS.IN_PROGRESS && (
+            <div className="flex items-center justify-center space-x-5">
+              <div className="flex flex-col">
+                <h1 className="font-semibold ">NEXT KUAN</h1>
+                <h1 className="font-mono text-3xl tracking-wider md:text-4xl">
+                  {`${timeLeft.hours < 10 ? '0' : ''}${timeLeft.hours}`}:
+                  {`${timeLeft.minutes < 10 ? '0' : ''}${timeLeft.minutes}`}:
+                  {`${timeLeft.seconds < 10 ? '0' : ''}${timeLeft.seconds}`}
+                </h1>
+              </div>
+              <div className="">
+                <button
+                  onClick={() => {
+                    getShareStatus(
+                      boardState,
+                      evaluations,
+                      gameStatus,
+                      theme === 'dark'
+                    );
+                  }}
+                  className="inline-flex items-center px-5 m-2 text-white transition-colors duration-150 bg-green-600 rounded-lg h-14 focus:shadow-outline hover:bg-green-900"
+                >
+                  <span className="text-3xl font-semibold">SHARE</span>
+                  <ShareIcon className="w-8 h-8 ml-2" />
                 </button>
               </div>
-
-              <hr />
-
-              <div className="flex items-center justify-center space-x-5">
-                <div className="flex flex-col">
-                  <h1 className="font-semibold ">NEXT KUAN</h1>
-                  <h1 className="font-mono text-3xl tracking-wider md:text-4xl">
-                    {`${timeLeft.hours < 10 ? '0' : ''}${timeLeft.hours}`}:
-                    {`${timeLeft.minutes < 10 ? '0' : ''}${timeLeft.minutes}`}:
-                    {`${timeLeft.seconds < 10 ? '0' : ''}${timeLeft.seconds}`}
-                  </h1>
-                </div>
-                <div className="">
-                  <button
-                    onClick={() => {
-                      getShareStatus(
-                        boardState,
-                        evaluations,
-                        gameStatus,
-                        theme === 'dark'
-                      );
-                    }}
-                    className="inline-flex items-center px-5 m-2 text-white transition-colors duration-150 bg-green-600 rounded-lg h-14 focus:shadow-outline hover:bg-green-900"
-                  >
-                    <span className="text-3xl font-semibold">SHARE</span>
-                    <ShareIcon className="w-8 h-8 ml-2" />
-                  </button>
-                </div>
-              </div>
-            </>
+            </div>
           )}
         </div>
       </Modal>
@@ -325,8 +325,6 @@ const Header = ({
               />
             </Switch>
           </div>
-
-          <hr />
 
           <div className="flex items-center justify-between pt-4"></div>
         </div>
