@@ -176,7 +176,7 @@ const Kuan = () => {
       guess,
       rowIndex,
       toggleStatsModal,
-      updateGameState,
+      // updateGameState,
     ]
   );
 
@@ -231,6 +231,7 @@ const Kuan = () => {
           toggleStatsModal={toggleStatsModal}
           gameStats={statistics}
           wordOfTheDay={wod}
+          gameStatus={gameStatus}
         />
         <div className="space-y-1">
           {boardState.map((word, index) => (
