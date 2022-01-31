@@ -52,7 +52,7 @@ const tests = () => {
 const Kuan = () => {
   const [evaluations, setEvaluations] = useState(new Array(BOARD_STATE.length));
   const [gameBoard, setGameBoard] = useState(BOARD_STATE);
-  const [gameState, setGameState] = useState(GAME_STATUS.IN_PROGRESS);
+  const [gameStatus, setGameStatus] = useState(GAME_STATUS.IN_PROGRESS);
   const [guess, setGuess] = useState('');
   const [keyboardState, setKeyboardState] = useState(getKeyboardState());
   const [rowIndex, setRowIndex] = useState(gameBoard.indexOf(''));
@@ -70,7 +70,7 @@ const Kuan = () => {
 
   // tests();
 
-  const checkGameState = useCallback(() => {
+  const checkGameStatus = useCallback(() => {
     return guess.toLowerCase() === WORD_OF_THE_DAY.toLowerCase()
       ? GAME_STATUS.WIN
       : rowIndex < BOARD_STATE.length
@@ -108,9 +108,9 @@ const Kuan = () => {
             setRowIndex(gameBoard.indexOf(''));
             setEvaluations([...evaluations]);
             setGameBoard([...gameBoard]);
-            setGameState(checkGameState());
+            setGameStatus(checkGameStatus());
 
-            if (checkGameState() !== GAME_STATUS.IN_PROGRESS) {
+            if (checkGameStatus() !== GAME_STATUS.IN_PROGRESS) {
               toggleStatsModal();
             }
           } else {
@@ -119,13 +119,13 @@ const Kuan = () => {
         }
       }
     },
-    [checkGameState, evaluations, gameBoard, guess, rowIndex, toggleStatsModal]
+    [checkGameStatus, evaluations, gameBoard, guess, rowIndex, toggleStatsModal]
   );
 
   const onKeyPress = useCallback(
     (event) => {
       if (
-        gameState === GAME_STATUS.IN_PROGRESS &&
+        gameStatus === GAME_STATUS.IN_PROGRESS &&
         !showHowModal &&
         !showSettingsModal &&
         !showStatsModal
@@ -133,7 +133,7 @@ const Kuan = () => {
         handlePress(event.keyCode);
       }
     },
-    [gameState, handlePress, showHowModal, showSettingsModal, showStatsModal]
+    [gameStatus, handlePress, showHowModal, showSettingsModal, showStatsModal]
   );
 
   const onPress = (keyCode) => {
@@ -158,6 +158,7 @@ const Kuan = () => {
           toggleSettingsModal={toggleSettingsModal}
           toggleStatsModal={toggleStatsModal}
           gameStats={STATISTICS}
+          gameStatus={gameStatus}
           wordOfTheDay={WORD_OF_THE_DAY}
         />
         <div className="space-y-1">
@@ -172,7 +173,7 @@ const Kuan = () => {
         </div>
         <Keyboard
           disabled={
-            gameState !== GAME_STATUS.IN_PROGRESS ||
+            gameStatus !== GAME_STATUS.IN_PROGRESS ||
             showHowModal ||
             showSettingsModal ||
             showStatsModal
