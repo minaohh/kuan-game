@@ -14,7 +14,7 @@ import {
   loadGameState,
   saveGameState,
 } from '../utils/utils';
-import { GAME_STATE_KEY, GAME_STATUS } from '../utils/constants';
+import { GAME_STATUS } from '../utils/constants';
 import toast, { Toaster } from 'react-hot-toast';
 
 // Initial values
@@ -42,7 +42,7 @@ const INIT_GAME_STATE = {
   boardState: INIT_BOARD_STATE,
   evaluations: new Array(INIT_BOARD_STATE.length),
   gameStatus: GAME_STATUS.IN_PROGRESS,
-  lastPlayed: new Date(),
+  lastPlayed: null,
   lastCompleted: null,
   rowIndex: 0,
   // keyboardState: getKeyboardState(),
@@ -155,7 +155,7 @@ const Kuan = () => {
               boardState,
               evaluations,
               gameStatus,
-              lastPlayed,
+              lastPlayed: new Date(),
               lastCompleted: lastCompletedDate,
               rowIndex,
               wod,
@@ -167,7 +167,7 @@ const Kuan = () => {
         }
       }
     },
-    [evaluations, boardState, guess, lastCompleted, lastPlayed, rowIndex, wod]
+    [evaluations, boardState, guess, lastCompleted, rowIndex, wod]
   );
 
   const onKeyPress = useCallback(
