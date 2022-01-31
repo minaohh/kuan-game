@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Switch } from '@headlessui/react';
 import {
   ChartBarIcon,
@@ -13,6 +13,7 @@ import { useTheme } from 'next-themes';
 import Modal from './Modal';
 import Word from './Word';
 import { GAME_STATUS } from '../../utils/constants';
+import { calculateTimeLeft } from '../../utils/utils';
 
 const Header = ({
   showHowModal,
@@ -27,11 +28,20 @@ const Header = ({
 }) => {
   const { theme, setTheme } = useTheme();
   const [enabled, setEnabled] = useState(theme === 'dark');
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
   const toggleTheme = () => {
     setEnabled(theme !== 'dark');
     setTheme(theme === 'dark' ? 'light' : 'dark');
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  });
 
   return (
     <header className="flex items-center justify-between p-1 border-b">
@@ -200,17 +210,23 @@ const Header = ({
           <hr />
 
           {/* Next word */}
-          <div className="grid grid-cols-2 divide-x gap-x-4">
+          <div className="flex items-center justify-center space-x-5">
             <div className="flex flex-col">
               <h1 className="font-semibold ">NEXT KUAN</h1>
-              <h1 className="text-4xl tracking-wider">11:16:23</h1>
+              <h1 className="text-3xl tracking-wider md:text-4xl">
+                {`${timeLeft.hours < 10 ? '0' : ''}${timeLeft.hours}`}:
+                {`${timeLeft.minutes < 10 ? '0' : ''}${timeLeft.minutes}`}:
+                {`${timeLeft.seconds < 10 ? '0' : ''}${timeLeft.seconds}`}
+              </h1>
             </div>
             <div className="">
               <button
                 onClick={() => {}}
                 className="flex flex-row px-4 py-2 text-white align-middle bg-green-600 rounded"
               >
-                <span className="text-xl font-semibold">SHARE</span>
+                <span className="text-base font-semibold md:text-xl">
+                  SHARE
+                </span>
                 <ShareIcon className="w-6 h-6 ml-2" />
               </button>
             </div>
