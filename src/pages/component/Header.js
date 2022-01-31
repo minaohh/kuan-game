@@ -187,7 +187,62 @@ const Header = ({
           {/* Graph */}
           <div className="flex flex-col">
             <h3 className="text-lg font-bold">Guess Distribution</h3>
-            <p className="font-thin">Insert bar graph here (TODO)</p>
+            <div className="flex flex-col items-start justify-center space-y-1 font-mono text-sm text-left ">
+              <div className="flex flex-row w-full space-x-1">
+                <p>1</p>
+                <div
+                  className="px-1 text-white bg-gray-600"
+                  style={{ minWidth: '10%', width: null }}
+                >
+                  <span>0</span>
+                </div>
+              </div>
+              <div className="flex flex-row space-x-1">
+                <p>2</p>
+                <div
+                  className="px-1 text-white bg-gray-600"
+                  style={{ minWidth: '10%', width: null }}
+                >
+                  <span>0</span>
+                </div>
+              </div>
+              <div className="flex flex-row space-x-1">
+                <p>3</p>
+                <div
+                  className="px-1 text-white bg-gray-600"
+                  style={{ minWidth: '10%', width: null }}
+                >
+                  <span>0</span>
+                </div>
+              </div>
+              <div className="flex flex-row space-x-1">
+                <p>4</p>
+                <div
+                  className="px-1 text-white bg-gray-600"
+                  style={{ minWidth: '10%', width: null }}
+                >
+                  <span>0</span>
+                </div>
+              </div>
+              <div className="flex flex-row space-x-1">
+                <p>5</p>
+                <div
+                  className="px-1 text-white bg-gray-600"
+                  style={{ minWidth: '10%', width: null }}
+                >
+                  <span>0</span>
+                </div>
+              </div>
+              <div className="flex flex-row space-x-1">
+                <p>6</p>
+                <div
+                  className="px-1 text-white bg-gray-600"
+                  style={{ minWidth: '10%', width: null }}
+                >
+                  <span>0</span>
+                </div>
+              </div>
+            </div>
           </div>
 
           <hr />
@@ -200,7 +255,7 @@ const Header = ({
               </h1>
               <button
                 onClick={() => window.open(getWordDictLink(wordOfTheDay))}
-                className="inline-flex items-center h-8 text-sm px-5 text-white transition-colors align-middle duration-150 bg-indigo-500 rounded-lg focus:shadow-outline hover:bg-indigo-800"
+                className="inline-flex items-center h-8 px-5 text-sm text-white align-middle transition-colors duration-150 bg-indigo-500 rounded-lg focus:shadow-outline hover:bg-indigo-800"
               >
                 <span>View Definition</span>
                 <ExternalLinkIcon className="w-4 h-4 ml-2" />
@@ -213,7 +268,7 @@ const Header = ({
           <div className="flex items-center justify-center space-x-5">
             <div className="flex flex-col">
               <h1 className="font-semibold ">NEXT KUAN</h1>
-              <h1 className="text-3xl tracking-wider md:text-4xl font-mono">
+              <h1 className="font-mono text-3xl tracking-wider md:text-4xl">
                 {`${timeLeft.hours < 10 ? '0' : ''}${timeLeft.hours}`}:
                 {`${timeLeft.minutes < 10 ? '0' : ''}${timeLeft.minutes}`}:
                 {`${timeLeft.seconds < 10 ? '0' : ''}${timeLeft.seconds}`}
@@ -222,7 +277,7 @@ const Header = ({
             <div className="">
               <button
                 onClick={() => {}}
-                className="inline-flex h-14 px-5 m-2 text-white items-center transition-colors duration-150 bg-green-600 rounded-lg focus:shadow-outline hover:bg-green-900"
+                className="inline-flex items-center px-5 m-2 text-white transition-colors duration-150 bg-green-600 rounded-lg h-14 focus:shadow-outline hover:bg-green-900"
               >
                 <span className="font-semibold text-3xl">SHARE</span>
                 <ShareIcon className="w-8 h-8 ml-2" />
@@ -238,7 +293,7 @@ const Header = ({
         title="Settings"
         toggle={toggleSettingsModal}
       >
-        <div className="w-52 md:w-80 space-y-4">
+        <div className="space-y-4 w-52 md:w-80">
           <div className="flex items-center justify-between">
             <p>Dark Mode</p>
             <Switch
