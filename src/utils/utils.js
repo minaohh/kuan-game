@@ -1,6 +1,6 @@
 import db from '../data/db.json';
 import words from '../data/wod.json';
-import { LANG_CEBUANO } from './constants';
+import { GAME_STATUS, LANG_CEBUANO } from './constants';
 
 export const GAME_MODE = {
   language: LANG_CEBUANO,
@@ -165,4 +165,15 @@ export const formatDate = (date) => date.toISOString().slice(0, 10);
 export const getWordDictLink = (wod = getWordOfTheDay(), mode = GAME_MODE) => {
   // e.g. https://cebuano.pinoydictionary.com/word/sayaw/
   return `https://${mode.language}.pinoydictionary.com/word/${wod}/`;
+};
+
+export const checkGameStatus = (guess, rowIndex, wod, size) => {
+  // console.log('guess', answer);
+  // console.log('stat', answer.toLowerCase() === wod.toLowerCase());
+
+  return guess.toLowerCase() === wod.toLowerCase()
+    ? GAME_STATUS.WIN
+    : rowIndex < size
+    ? GAME_STATUS.IN_PROGRESS
+    : GAME_STATUS.LOSE;
 };

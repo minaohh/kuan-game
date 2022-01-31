@@ -9,6 +9,7 @@ import {
   getWordDictLink,
   getWordOfTheDay,
   isWordValid,
+  checkGameStatus,
 } from '../utils/utils';
 import { GAME_STATE_STR, GAME_STATUS } from '../utils/constants';
 import toast, { Toaster } from 'react-hot-toast';
@@ -46,15 +47,12 @@ const INIT_GAME_STATE = {
 };
 
 const tests = () => {
-  console.log('word of the day : ', getWordOfTheDay());
-
-  console.log('word link: ', getWordDictLink(INIT_WOD));
-
+  // console.log('word of the day : ', getWordOfTheDay());
+  // console.log('word link: ', getWordDictLink(INIT_WOD));
   // const guess = 'LIHOK'; // wod: hilom, guess: lihok, nipis
   // console.log('Guess: ', guess);
   // console.log('lettersCount: ', lettersCount());
   // console.log('is guess in dictionary? ', isWordValid(guess));
-
   // let result = checkWord(guess);
   // console.log('result: ', result);
   // console.log('keyboard: ', getKeyboardState(guess, result));
@@ -62,14 +60,16 @@ const tests = () => {
 
 const Kuan = () => {
   // Game State
-  const [gameState, setGameState] = useState(INIT_GAME_STATE);
-  const [evaluations, setEvaluations] = useState(gameState.evaluations);
-  const [boardState, setBoardState] = useState(gameState.boardState);
-  const [gameStatus, setGameStatus] = useState(gameState.gameStatus);
-  const [rowIndex, setRowIndex] = useState(gameState.rowIndex);
-  const [lastPlayed, setLastPlayed] = useState(gameState.lastPlayed);
-  const [lastCompleted, setLastCompleted] = useState(gameState.lastCompleted);
-  const [wod, setWod] = useState(gameState.wod);
+  // const [gameState, setGameState] = useState(INIT_GAME_STATE);
+  const [evaluations, setEvaluations] = useState(INIT_GAME_STATE.evaluations);
+  const [boardState, setBoardState] = useState(INIT_GAME_STATE.boardState);
+  const [gameStatus, setGameStatus] = useState(INIT_GAME_STATE.gameStatus);
+  const [rowIndex, setRowIndex] = useState(INIT_GAME_STATE.rowIndex);
+  const [lastPlayed, setLastPlayed] = useState(INIT_GAME_STATE.lastPlayed);
+  const [lastCompleted, setLastCompleted] = useState(
+    INIT_GAME_STATE.lastCompleted
+  );
+  const [wod, setWod] = useState(INIT_GAME_STATE.wod);
   // Stats
   const [stats, setStats] = useState(statistics);
   // Modal State
@@ -86,43 +86,54 @@ const Kuan = () => {
     () => setStatsModalState(!showStatsModal),
     [showStatsModal]
   );
+  const isGameInProgress =
+    gameStatus === GAME_STATUS.IN_PROGRESS &&
+    !showHowModal &&
+    !showSettingsModal &&
+    !showStatsModal;
 
   // tests();
 
-  useEffect(() => {
-    // Get user state
-    const temp = window.localStorage.getItem('gameState');
-    console.log('localStorage - get: ', temp);
+  // const checkGameStatus = useCallback(
+  //   (guess, rowIndex, wod) => {
+  //     // console.log('guess', answer);
+  //     // console.log('stat', answer.toLowerCase() === wod.toLowerCase());
 
-    if (temp !== null) {
-      const tempState = JSON.parse(temp);
-      setGameState({ ...tempState });
+  //     return guess.toLowerCase() === wod.toLowerCase()
+  //       ? GAME_STATUS.WIN
+  //       : rowIndex < INIT_BOARD_STATE.length
+  //       ? GAME_STATUS.IN_PROGRESS
+  //       : GAME_STATUS.LOSE;
+  //   },
+  //   [guess, rowIndex, wod]
+  // );
 
-      setBoardState(tempState.boardState);
-      setEvaluations(tempState.evaluations);
-      setGameStatus(tempState.gameStatus);
-      setLastPlayed(tempState.lastPlayed);
-      setLastCompleted(tempState.lastCompleted);
-      setRowIndex(tempState.rowIndex);
-      setWod(tempState.wod);
+  const updateGameState = useCallback(() => {
+    // console.log('gameStatus', checkGameStatus());
+    // console.log('rowIndex', rowIndex);
 
-      // let i = 0;
-      // while (boardState[i] !== '') {
-      //   setKeyboardState(
-      //     getKeyboardState(boardState[i], evaluations[i], keyboardState)
-      //   );
-      //   i++;
-      // }
-    }
-  }, []);
-
-  const checkGameStatus = useCallback(() => {
-    return guess.toLowerCase() === wod.toLowerCase()
-      ? GAME_STATUS.WIN
-      : rowIndex < INIT_BOARD_STATE.length
-      ? GAME_STATUS.IN_PROGRESS
-      : GAME_STATUS.LOSE;
-  }, [guess, rowIndex]);
+    const newState = {
+      // ...gameState,
+      boardState,
+      evaluations,
+      gameStatus,
+      lastPlayed,
+      lastCompleted,
+      rowIndex,
+      wod,
+    };
+    // console.log('newstate ', newState);
+    window.localStorage.setItem(GAME_STATE_STR, JSON.stringify(newState));
+  }, [
+    // gameState,
+    boardState,
+    evaluations,
+    gameStatus,
+    lastPlayed,
+    lastCompleted,
+    rowIndex,
+    wod,
+  ]);
 
   const handlePress = useCallback(
     (keyCode) => {
@@ -151,18 +162,26 @@ const Kuan = () => {
               evaluation,
               keyboardState
             );
+            const gameStatus = checkGameStatus(
+              guess,
+              rowIndex,
+              wod,
+              INIT_BOARD_STATE.length
+            );
             setKeyboardState(keyboardState);
-            setGuess('');
-            setRowIndex(boardState.indexOf(''));
             setEvaluations([...evaluations]);
             setBoardState([...boardState]);
-            setGameStatus(checkGameStatus());
+            setGameStatus(gameStatus);
 
-            if (checkGameStatus() !== GAME_STATUS.IN_PROGRESS) {
+            // const lastGuess = boardState.indexOf('') - 1;
+
+            if (gameStatus !== GAME_STATUS.IN_PROGRESS) {
               toggleStatsModal();
             }
 
+            setRowIndex(boardState.indexOf(''));
             updateGameState();
+            setGuess('');
           } else {
             toast.error('Kuan... Wala sa listahan\n(Word not on the list)');
           }
@@ -170,42 +189,34 @@ const Kuan = () => {
       }
     },
     [
-      checkGameStatus,
       evaluations,
       boardState,
       guess,
       rowIndex,
+      updateGameState,
       toggleStatsModal,
-      // updateGameState,
+      wod,
     ]
   );
 
-  const updateGameState = useCallback(() => {
-    const newState = {
-      ...gameState,
-      boardState,
-      evaluations,
-      gameStatus,
-      lastPlayed,
-      lastCompleted,
-      rowIndex,
-      wod,
-    };
-    window.localStorage.setItem(GAME_STATE_STR, JSON.stringify(newState));
-  });
+  // const updateGameStatus = useCallback(
+  //   (gameStat = gameStatus) => {
+  //     setGameStatus(gameStat);
+
+  //     if (gameStatus !== GAME_STATUS.IN_PROGRESS) {
+  //       toggleStatsModal();
+  //     }
+  //   },
+  //   [toggleStatsModal, gameStatus]
+  // );
 
   const onKeyPress = useCallback(
     (event) => {
-      if (
-        gameStatus === GAME_STATUS.IN_PROGRESS &&
-        !showHowModal &&
-        !showSettingsModal &&
-        !showStatsModal
-      ) {
+      if (isGameInProgress) {
         handlePress(event.keyCode);
       }
     },
-    [gameStatus, handlePress, showHowModal, showSettingsModal, showStatsModal]
+    [handlePress, isGameInProgress]
   );
 
   const onPress = (keyCode) => {
@@ -217,6 +228,36 @@ const Kuan = () => {
 
     return () => document.removeEventListener('keydown', onKeyPress);
   }, [onKeyPress]);
+
+  useEffect(() => {
+    // Get local user state
+    const temp = window.localStorage.getItem('gameState');
+    // console.log('localStorage - get: ', temp);
+
+    if (temp !== null) {
+      const tempState = JSON.parse(temp);
+      // setGameState({ ...tempState });
+      setGameStatus(tempState.gameStatus);
+      setBoardState(tempState.boardState);
+      setEvaluations(tempState.evaluations);
+      setLastPlayed(tempState.lastPlayed);
+      setLastCompleted(tempState.lastCompleted);
+      setRowIndex(tempState.rowIndex + 1);
+      setWod(tempState.wod);
+
+      // let i = 0;
+      // while (boardState[i] !== '') {
+      //   setKeyboardState(
+      //     getKeyboardState(boardState[i], evaluations[i], keyboardState)
+      //   );
+      //   i++;
+      // }
+
+      if (tempState.gameStatus !== GAME_STATUS.IN_PROGRESS) {
+        toggleStatsModal();
+      }
+    }
+  }, [toggleStatsModal]);
 
   return (
     <>
@@ -244,12 +285,7 @@ const Kuan = () => {
           ))}
         </div>
         <Keyboard
-          disabled={
-            gameStatus !== GAME_STATUS.IN_PROGRESS ||
-            showHowModal ||
-            showSettingsModal ||
-            showStatsModal
-          }
+          disabled={!isGameInProgress}
           onPress={onPress}
           state={keyboardState}
         />
