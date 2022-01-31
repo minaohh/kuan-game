@@ -166,7 +166,11 @@ export const calculateTimeLeft = () => {
 };
 
 // Formats date to yyyy-MM-dd
-export const formatDate = (date) => date.toISOString().slice(0, 10);
+export const formatDate = (date) => {
+  return `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${(
+    '0' + date.getDate()
+  ).slice(-2)}`;
+};
 
 // Returns the link of the correct word
 export const getWordDictLink = (wod = getWordOfTheDay(), mode = GAME_MODE) => {
@@ -186,6 +190,8 @@ export const loadGameState = (key) =>
 
 export const saveGameState = (key, value) =>
   window.localStorage.setItem(key, JSON.stringify(value));
+
+export const getShareStatus = () => {};
 
 // GAME STATUS workaround
 // const lastGuessIdx = tempState.boardState.indexOf('') - 1;
