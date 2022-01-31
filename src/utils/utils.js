@@ -228,13 +228,11 @@ export const getShareStatus = (
 
   const ps = '#KanangKuan';
 
-  let output =
+  return (
     `Kuan #${gameCount} ${
       gameStatus === GAME_STATUS.WIN ? scoreWon : scoreLose
-    }` + `\n\n${resultsGrid}\n\n${ps}`;
-
-  console.log(output);
-  return output;
+    }` + `\n\n${resultsGrid}\n\n${ps}`
+  );
 };
 
 // GAME STATUS workaround
