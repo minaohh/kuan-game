@@ -86,7 +86,6 @@ export const checkWord = (word, mode = GAME_MODE) => {
   const ans = getWordOfTheDay().split('');
   const guess = word.split('');
   let res = ['', '', '', '', ''];
-  let code = '';
   let letters = lettersCount();
 
   // Check green first so there's no duplicates
@@ -96,7 +95,6 @@ export const checkWord = (word, mode = GAME_MODE) => {
       letters[val]--;
     }
   });
-  console.log('checkgreen - ', res);
 
   // Check the rest
   guess.forEach((val, i) => {
@@ -109,20 +107,6 @@ export const checkWord = (word, mode = GAME_MODE) => {
       }
     }
   });
-
-  console.log('check all', res);
-  // for (let i = 0; i < guess.length; i++) {
-  //   if (guess[i] === ans[i] && letters[guess[i]] > 0) {
-  //     code = 'correct';
-  //     letters[guess[i]]--;
-  //   } else if (ans.includes(guess[i]) && letters[guess[i]] > 0) {
-  //     code = 'present';
-  //   } else {
-  //     code = 'absent';
-  //   }
-
-  //   res.push(code);
-  // }
 
   return res;
 };
@@ -143,8 +127,6 @@ export const getKeyboardState = (
         keyboard[g] = guessResult[idx];
       }
     });
-
-    // console.log('GETKEYBOARD STATE KEYBOARD', keyboard);
   }
 
   return keyboard;
