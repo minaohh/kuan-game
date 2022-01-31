@@ -213,7 +213,7 @@ const Header = ({
           <div className="flex items-center justify-center space-x-5">
             <div className="flex flex-col">
               <h1 className="font-semibold ">NEXT KUAN</h1>
-              <h1 className="text-3xl tracking-wider md:text-4xl">
+              <h1 className="text-3xl tracking-wider md:text-4xl font-mono">
                 {`${timeLeft.hours < 10 ? '0' : ''}${timeLeft.hours}`}:
                 {`${timeLeft.minutes < 10 ? '0' : ''}${timeLeft.minutes}`}:
                 {`${timeLeft.seconds < 10 ? '0' : ''}${timeLeft.seconds}`}
@@ -227,7 +227,7 @@ const Header = ({
                 <span className="text-base font-semibold md:text-3xl">
                   SHARE
                 </span>
-                <ShareIcon className="w-6 h-6 ml-2" />
+                <ShareIcon className="w-8 h-8 ml-2" />
               </button>
             </div>
           </div>
@@ -240,9 +240,9 @@ const Header = ({
         title="Settings"
         toggle={toggleSettingsModal}
       >
-        <div className="w-52 md:w-80">
+        <div className="w-52 md:w-80 space-y-4">
           <div className="flex items-center justify-between">
-            <strong>Dark Mode</strong>
+            <p>Dark Mode</p>
             <Switch
               checked={enabled}
               onChange={toggleTheme}
@@ -257,6 +257,10 @@ const Header = ({
               />
             </Switch>
           </div>
+
+          <hr />
+
+          <div className="flex items-center justify-between pt-4"></div>
         </div>
       </Modal>
     </header>

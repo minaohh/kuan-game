@@ -38,7 +38,7 @@ const Modal = ({ children, show, title, toggle }) => {
             <div className="relative inline-block p-10 my-10 space-y-5 overflow-hidden text-left align-middle transition-all transform bg-white rounded shadow-xl dark:bg-gray-800">
               <Dialog.Title
                 as="h2"
-                className="text-2xl font-bold leading-5 text-center"
+                className="text-2xl font-bold leading-5 text-center pb-4"
               >
                 {title}
               </Dialog.Title>

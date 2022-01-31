@@ -68,7 +68,8 @@ export const keyboardStateInit = {
 // Returns the word of the day in the chosen language (string)
 export const getWordOfTheDay = (mode = GAME_MODE) => {
   let today = formatDate(new Date());
-  return words[today][mode.language];
+  return 'ngano';
+  // return words[today][mode.language];
 };
 
 // Check if the word is in the dictionary
@@ -116,10 +117,12 @@ export const getKeyboardState = (
     let guessArr = guess.toLowerCase().split('');
 
     guessArr.forEach((g, idx) => {
-      if (keyboard[g] === 'none' && keyboard[g] !== 'correct') {
+      if (keyboard[g] !== 'correct') {
         keyboard[g] = guessResult[idx];
       }
     });
+
+    // console.log('GETKEYBOARD STATE KEYBOARD', keyboard);
   }
 
   return keyboard;
