@@ -21,6 +21,7 @@ import {
   GAME_STATUS,
 } from '../utils/constants';
 import toast, { Toaster } from 'react-hot-toast';
+import { XIcon } from '@heroicons/react/outline';
 
 // Initial values
 export const INIT_BOARD_STATE = ['', '', '', '', '', ''];
@@ -159,7 +160,29 @@ const Kuan = () => {
             });
             setGuess('');
           } else {
-            toast.error('Kuan... Wala sa listahan\n(Word not on the list)');
+            toast.custom((t) => (
+              <div
+                className={`${
+                  t.visible ? 'animate-enter' : 'animate-leave'
+                } bg-red-100 border-red-600 border shadow-lg rounded-lg pointer-events-auto flex`}
+              >
+                <div className="flex-1 p-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="flex-shrink-0">
+                      <XIcon className="w-5 h-5 text-red-600" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-gray-800">
+                        Kuan... Wala sa listahan
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        Word not on the list
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ));
           }
         }
       }
