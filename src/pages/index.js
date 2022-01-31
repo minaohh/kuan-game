@@ -10,6 +10,7 @@ import {
   getWordOfTheDay,
   isWordValid,
   checkGameStatus,
+  keyboardStateInit,
 } from '../utils/utils';
 import { GAME_STATE_STR, GAME_STATUS } from '../utils/constants';
 import toast, { Toaster } from 'react-hot-toast';
@@ -225,10 +226,11 @@ const Kuan = () => {
   useEffect(() => {
     // Get local user state
     const temp = window.localStorage.getItem('gameState');
-    // console.log('localStorage - get: ', temp);
 
     if (temp !== null) {
       const tempState = JSON.parse(temp);
+      console.log('localStorage: ', tempState);
+
       // setGameState({ ...tempState });
       // setGameStatus(tempState.gameStatus);
       setBoardState(tempState.boardState);
@@ -255,15 +257,24 @@ const Kuan = () => {
       //   toggleStatsModal();
       // }
 
-      // let i = 0;
-      // while (boardState[i] !== '') {
-      //   setKeyboardState(
-      //     getKeyboardState(boardState[i], evaluations[i], keyboardState)
-      //   );
-      //   i++;
-      // }
+      // KEYBOARD STATE
+      let tempKeyboard = keyboardStateInit;
+      tempState.boardState.forEach((val, i) => {
+        if (val !== '') {
+          let kbs = getKeyboardState(
+            val,
+            tempState.evaluations[i],
+            tempKeyboard
+          );
+          console.log('val', val);
+          console.log('i', tempState.evaluations[i]);
+          tempKeyboard = kbs;
+        }
+      });
+      console.log('tempKeyboard', tempKeyboard);
+      setKeyboardState(tempKeyboard);
     }
-  }, [toggleStatsModal]);
+  }, []);
 
   return (
     <>

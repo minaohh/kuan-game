@@ -36,7 +36,7 @@ const letterCountInit = {
   z: 0,
 };
 
-const keyboardStateInit = {
+export const keyboardStateInit = {
   a: 'none',
   b: 'none',
   c: 'none',
@@ -116,7 +116,7 @@ export const getKeyboardState = (
     let guessArr = guess.toLowerCase().split('');
 
     guessArr.forEach((g, idx) => {
-      if (keyboard[g] === 'none') {
+      if (keyboard[g] === 'none' && keyboard[g] !== 'correct') {
         keyboard[g] = guessResult[idx];
       }
     });
