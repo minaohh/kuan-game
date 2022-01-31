@@ -192,8 +192,10 @@ const Kuan = () => {
 
   const onKeyPress = useCallback(
     (event) => {
-      if (isGameInProgress) {
-        handlePress(event.keyCode);
+      if (!event.ctrlKey && !event.metaKey) {
+        if (isGameInProgress) {
+          handlePress(event.keyCode);
+        }
       }
     },
     [handlePress, isGameInProgress]
