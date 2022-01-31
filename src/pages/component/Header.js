@@ -279,9 +279,7 @@ const Header = ({
                 onClick={() => {}}
                 className="inline-flex items-center px-5 m-2 text-white transition-colors duration-150 bg-green-600 rounded-lg h-14 focus:shadow-outline hover:bg-green-900"
               >
-                <span className="text-base font-semibold md:text-3xl">
-                  SHARE
-                </span>
+                <span className="font-semibold text-3xl">SHARE</span>
                 <ShareIcon className="w-8 h-8 ml-2" />
               </button>
             </div>
