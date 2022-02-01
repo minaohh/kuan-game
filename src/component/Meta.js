@@ -41,7 +41,7 @@ const Meta = () => {
       />
       <meta
         property="twitter:image"
-        content="https://kuan.vercel.app/images/seo-cover.png"
+        content="https://kuan.vercel.app/seo-cover.png"
       ></meta>
     </Head>
   );
