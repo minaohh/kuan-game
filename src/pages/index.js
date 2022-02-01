@@ -159,16 +159,6 @@ const Kuan = () => {
               rowIndex,
               wod,
             });
-
-            console.log('ojb', {
-              boardState,
-              evaluations,
-              gameStatus,
-              lastPlayed: _lastPlayed,
-              lastCompleted: lastCompletedDate,
-              rowIndex,
-              wod,
-            });
             setGuess('');
           } else {
             toast.custom((t) => (
