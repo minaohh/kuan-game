@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { ThemeProvider } from 'next-themes';
+import { useRouter } from 'next/router';
 import ReactGA from 'react-ga';
 
 import '../styles/globals.css';
