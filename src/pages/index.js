@@ -129,6 +129,7 @@ const Kuan = () => {
                 statistics.guesses[`${rowIndex + 1}`]++;
                 statistics.gamesWon++;
                 statistics.currentStreak++;
+                setRowIndex(rowIndex + 1);
               } else {
                 statistics.currentStreak = 0;
                 statistics.guesses.fail++;
@@ -258,6 +259,8 @@ const Kuan = () => {
         });
         setKeyboardState(tempKeyboard);
       }
+    } else {
+      setHowModalState(true);
     }
 
     if (statistics !== null) {
@@ -279,7 +282,12 @@ const Kuan = () => {
           toggleStatsModal={toggleStatsModal}
           gameStats={statistics}
           wordOfTheDay={wod}
-          gameState={{ boardState, evaluations, gameStatus }}
+          gameState={{
+            boardState,
+            evaluations,
+            gameStatus,
+            rowIndex,
+          }}
         />
         <div className="space-y-1">
           {boardState.map((word, index) => (

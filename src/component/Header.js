@@ -254,7 +254,10 @@ const Header = ({
                   <p>{index + 1}</p>
                   <div
                     className={`px-1 text-white ${
-                      guess.value > 0 ? 'bg-green-600' : 'bg-gray-600'
+                      gameStatus === GAME_STATUS.WIN &&
+                      gameState.rowIndex - 1 === index
+                        ? 'bg-green-600'
+                        : 'bg-gray-600'
                     }`}
                     style={{
                       minWidth: '10%',
@@ -348,14 +351,51 @@ const Header = ({
           <div className="flex items-center justify-between">
             <p>Feedback</p>
             <div className="space-x-3 divide-x-2 divide-gray-600">
-              <Link href="mailto:teamminjay@gmail.com?subject=KuanFeedback">
+              <Link href="mailto:teamminjay@gmail.com?subject=Kuan%20Feedback">
                 <a className="underline" target="_blank">
                   Email
                 </a>
               </Link>
               <Link href="https://twitter.com/intent/tweet?screen_name=TeamMinJay">
-                <a className="underline pl-3" target="_blank">
+                <a className="pl-3 underline" target="_blank">
                   Twitter
+                </a>
+              </Link>
+            </div>
+          </div>
+          <div className="flex items-center justify-between">
+            <p>Social Share</p>
+            <div className="space-x-3 divide-x-2 divide-gray-600">
+              <Link
+                href={`https://twitter.com/share?text=${encodeURI(
+                  'Katong wala pa suway, panuway mo!\nOg katong wala pa ka-Kuan, pag-Kuan namo!\n\n'
+                )}&hashtags=wordle,KanangKuan,bisaya&url=${encodeURI(
+                  'https://kuan.vercel.app'
+                )}`}
+              >
+                <a className="underline" target="_blank">
+                  Tweet
+                </a>
+              </Link>
+              <Link
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURI(
+                  'https://kuan.vercel.app'
+                )}&quote=${encodeURI(
+                  'Katong wala pa suway, panuway mo!\nOg katong wala pa ka-Kuan, pag-Kuan namo!'
+                )}`}
+              >
+                <a className="pl-3 underline" target="_blank">
+                  Facebook
+                </a>
+              </Link>
+            </div>
+          </div>
+          <div className="flex items-center justify-between">
+            <p>Privacy Policy</p>
+            <div className="space-x-3 divide-x-2 divide-gray-600">
+              <Link href="https://www.privacypolicygenerator.info/live.php?token=gi9itqZsJM64YEvwFTZ5eAeuY6RFmZmb">
+                <a className="underline" target="_blank">
+                  Read
                 </a>
               </Link>
             </div>
@@ -363,12 +403,12 @@ const Header = ({
           <hr />
 
           {/* About */}
-          <div className="flex flex-col items-center justify-center text-center pt-4">
+          <div className="flex flex-col items-center justify-center pt-4 text-center">
             <h1 className="space-x-3 text-4xl font-bold">
               <span>KUAN</span>
-              <small className="font-mono text-sm text-gray-400">v1.0.0</small>
+              <small className="font-mono text-sm text-gray-400">v1.0.2</small>
             </h1>
-            <span className="font-light text-sm text-left justify-items-start pt-4 space-y-2">
+            <span className="pt-4 space-y-2 text-sm font-light text-left justify-items-start">
               <p>
                 Kuan is a Bisaya or Cebuano clone of the popular game,{' '}
                 <a
@@ -398,9 +438,9 @@ const Header = ({
                   href="https://twitter.com/TeamMinJay"
                   target="_blank"
                   rel="noreferrer"
-                  className="hover:underline  decoration-pink-800 "
+                  className="hover:underline decoration-pink-800 "
                 >
-                  <span className="bg-pink-200 font-semibold">
+                  <span className="font-semibold bg-pink-200 dark:text-black">
                     @TeamMinJay{' '}
                   </span>
                 </a>
