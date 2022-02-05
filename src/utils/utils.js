@@ -7,35 +7,6 @@ export const GAME_MODE = {
   length: 5,
 };
 
-const letterCountInit = {
-  a: 0,
-  b: 0,
-  c: 0,
-  d: 0,
-  e: 0,
-  f: 0,
-  g: 0,
-  h: 0,
-  i: 0,
-  j: 0,
-  k: 0,
-  l: 0,
-  m: 0,
-  n: 0,
-  o: 0,
-  p: 0,
-  q: 0,
-  r: 0,
-  s: 0,
-  t: 0,
-  u: 0,
-  v: 0,
-  w: 0,
-  x: 0,
-  y: 0,
-  z: 0,
-};
-
 export const keyboardStateInit = {
   a: 'none',
   b: 'none',
@@ -68,7 +39,6 @@ export const keyboardStateInit = {
 // Returns the word of the day in the chosen language (string)
 export const getWordOfTheDay = (mode = GAME_MODE) => {
   let today = formatDate(new Date());
-  // return 'ngano';
   return words[today][mode.language];
 };
 
@@ -86,22 +56,21 @@ export const checkWord = (word, mode = GAME_MODE) => {
   const ans = getWordOfTheDay().split('');
   const guess = word.split('');
   let res = ['', '', '', '', ''];
-  let letters = lettersCount();
+  let letters = lettersCount(ans);
 
   // Check green first so there's no duplicates
   guess.forEach((val, i) => {
-    if (val === ans[i] && letters[val] > 0) {
+    if (val === ans[i] && letters[`${val}`] > 0) {
       res[i] = 'correct';
-      letters[val]--;
+      letters[`${val}`]--;
     }
   });
-
   // Check the rest
   guess.forEach((val, i) => {
     if (res[i] != 'correct') {
-      if (ans.includes(val) && letters[val] > 0) {
+      if (ans.includes(val) && letters[`${val}`] > 0) {
         res[i] = 'present';
-        letters[val]--;
+        letters[`${val}`]--;
       } else {
         res[i] = 'absent';
       }
@@ -134,11 +103,37 @@ export const getKeyboardState = (
 
 // Returns an object with the occurrences of each letter
 export const lettersCount = (word = getWordOfTheDay(), mode = GAME_MODE) => {
-  let letters = letterCountInit;
-  // let word = getWordOfTheDay();
+  let letters = {
+    a: 0,
+    b: 0,
+    c: 0,
+    d: 0,
+    e: 0,
+    f: 0,
+    g: 0,
+    h: 0,
+    i: 0,
+    j: 0,
+    k: 0,
+    l: 0,
+    m: 0,
+    n: 0,
+    o: 0,
+    p: 0,
+    q: 0,
+    r: 0,
+    s: 0,
+    t: 0,
+    u: 0,
+    v: 0,
+    w: 0,
+    x: 0,
+    y: 0,
+    z: 0,
+  };
 
   [...word].forEach((c) => {
-    letters[c]++;
+    letters[`${c}`]++;
   });
 
   return letters;

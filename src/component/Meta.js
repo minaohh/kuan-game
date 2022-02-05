@@ -6,23 +6,20 @@ const Meta = () => {
       <meta charSet="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-      <title>Kuan - Play the Popular Game in Bisaya</title>
+      <title>Kuan - Play Wordle in Bisaya</title>
 
-      <meta name="title" content="Kuan - Play the Popular Game in Bisaya" />
+      <meta name="title" content="Kuan - Play Wordle in Bisaya" />
       <meta
         name="description"
-        content="A Wordle Clone - Play the popular game in Bisaya and event learn a word or two."
+        content="A Wordle Clone - Put your Bisaya skills to the test. Play Wordle in Bisaya/Cebuano and even learn a word or two."
       />
 
       <meta property="og:type" content="website" />
       <meta property="og:url" content="https://kuan.vercel.app/" />
-      <meta
-        property="og:title"
-        content="Kuan - Play the Popular Game in Bisaya"
-      />
+      <meta property="og:title" content="Kuan - Play Wordle in Bisaya" />
       <meta
         property="og:description"
-        content="A Wordle Clone - Play the popular game in Bisaya and event learn a word or two."
+        content="A Wordle Clone - Put your Bisaya skills to the test. Play Wordle in Bisaya/Cebuano and even learn a word or two."
       />
       <meta
         property="og:image"
@@ -31,13 +28,10 @@ const Meta = () => {
 
       <meta property="twitter:card" content="summary_large_image" />
       <meta property="twitter:url" content="https://kuan.vercel.app/" />
-      <meta
-        property="twitter:title"
-        content="Kuan - Play the Popular Game in Bisaya"
-      />
+      <meta property="twitter:title" content="Kuan - Play Wordle in Bisaya" />
       <meta
         property="twitter:description"
-        content="A Wordle Clone - Play the popular game in Bisaya and event learn a word or two."
+        content="A Wordle Clone - Put your Bisaya skills to the test. Play Wordle in Bisaya/Cebuano and even learn a word or two."
       />
       <meta
         property="twitter:image"

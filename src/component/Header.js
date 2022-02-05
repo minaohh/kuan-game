@@ -118,7 +118,7 @@ const Header = ({
             target="_blank"
             rel="noreferrer"
           >
-            Wordle
+            🔗Wordle
           </a>
         </span>
       </h1>
@@ -426,18 +426,19 @@ const Header = ({
           <div className="flex flex-col items-center justify-center pt-4 text-center">
             <h1 className="space-x-3 text-4xl font-bold">
               <span>KUAN</span>
-              <small className="font-mono text-sm text-gray-400">v1.0.3</small>
+              <small className="font-mono text-sm text-gray-400">v1.0.5</small>
             </h1>
             <span className="pt-4 space-y-2 text-sm font-light text-left justify-items-start">
               <p>
-                Kuan is a Bisaya or Cebuano clone of the popular game,{' '}
+                KUAN (word game) is a Bisaya or Cebuano clone of the popular
+                game,{' '}
                 <a
                   href="https://www.powerlanguage.co.uk/wordle/"
                   target="_blank"
                   rel="noreferrer"
                   className="hover:underline"
                 >
-                  Wordle
+                  🔗Wordle
                 </a>
                 .{' '}
               </p>
@@ -449,21 +450,44 @@ const Header = ({
                   rel="noreferrer"
                   className="hover:underline"
                 >
-                  cebuano.pinoydictionary.com
+                  🔗cebuano.pinoydictionary.com
                 </a>
               </p>
-              <p className="pt-8 font-light">
-                Created with ❤ by{' '}
+              <p>
+                Try Wordle in Tagalog:{' '}
                 <a
-                  href="https://twitter.com/TeamMinJay"
+                  href="https://saltong.carldegs.com//"
                   target="_blank"
                   rel="noreferrer"
-                  className="hover:underline decoration-pink-800 "
+                  className="hover:underline"
                 >
-                  <span className="font-semibold bg-pink-200 dark:text-black">
-                    @TeamMinJay{' '}
-                  </span>
+                  🔗saltong.carldegs.com
                 </a>
+              </p>
+
+              <p className="pt-6 font-light flex flex-col ">
+                <span>
+                  <a
+                    href="https://ko-fi.com/minjay"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:underline text-gray-700 font-bold decoration-pink-800 dark:text-yellow-300 dark:decoration-yellow-100"
+                  >
+                    🔗 Help us build a website and keep it running.
+                  </a>
+                </span>
+
+                <span>
+                  Created with ❤ by{' '}
+                  <a
+                    href="https://twitter.com/TeamMinJay"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:underline decoration-pink-800 "
+                  >
+                    <span className="font-normal">🔗TeamMinJay </span>
+                  </a>
+                </span>
               </p>
             </span>
           </div>
