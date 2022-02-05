@@ -7,20 +7,21 @@ import {
   ExternalLinkIcon,
   ShareIcon,
 } from '@heroicons/react/outline';
-import {
-  getShareStatus,
-  getWordDictLink,
-  getWordOfTheDay,
-} from '../utils/utils';
+import Link from 'next/link';
 import { useTheme } from 'next-themes';
-import toast from 'react-hot-toast';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { event } from 'react-ga';
+import toast from 'react-hot-toast';
 
 import Modal from './Modal';
 import Word from './Word';
 import { GAME_STATUS } from '../utils/constants';
-import { calculateTimeLeft } from '../utils/utils';
-import Link from 'next/link';
+import {
+  calculateTimeLeft,
+  getShareStatus,
+  getWordDictLink,
+  getWordOfTheDay,
+} from '../utils/utils';
 
 const Header = ({
   showHowModal,
@@ -94,8 +95,18 @@ const Header = ({
     setGuesses([...guesses]);
   }, [gameStats]);
 
-  const share = () =>
-    getShareStatus(boardState, evaluations, gameStatus, theme === 'dark');
+  const share = () => {
+    event({
+      action: 'Share results',
+      category: 'GAME_SHARE',
+    });
+    return getShareStatus(
+      boardState,
+      evaluations,
+      gameStatus,
+      theme === 'dark'
+    );
+  };
 
   const handleShare = () => {
     window?.navigator?.share({
@@ -426,7 +437,7 @@ const Header = ({
           <div className="flex flex-col items-center justify-center pt-4 text-center">
             <h1 className="space-x-3 text-4xl font-bold">
               <span>KUAN</span>
-              <small className="font-mono text-sm text-gray-400">v1.0.5</small>
+              <small className="font-mono text-sm text-gray-400">v1.0.6</small>
             </h1>
             <span className="pt-4 space-y-2 text-sm font-light text-left justify-items-start">
               <p>
@@ -465,13 +476,13 @@ const Header = ({
                 </a>
               </p>
 
-              <p className="pt-6 font-light flex flex-col ">
+              <p className="flex flex-col pt-6 font-light ">
                 <span>
                   <a
                     href="https://ko-fi.com/minjay"
                     target="_blank"
                     rel="noreferrer"
-                    className="hover:underline text-gray-700 font-bold decoration-pink-800 dark:text-yellow-300 dark:decoration-yellow-100"
+                    className="font-bold text-gray-700 hover:underline decoration-pink-800 dark:text-yellow-300 dark:decoration-yellow-100"
                   >
                     🔗 Help us build a website and keep it running.
                   </a>
