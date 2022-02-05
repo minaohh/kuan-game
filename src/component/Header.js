@@ -7,20 +7,21 @@ import {
   ExternalLinkIcon,
   ShareIcon,
 } from '@heroicons/react/outline';
-import {
-  getShareStatus,
-  getWordDictLink,
-  getWordOfTheDay,
-} from '../utils/utils';
+import Link from 'next/link';
 import { useTheme } from 'next-themes';
-import toast from 'react-hot-toast';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { event } from 'react-ga';
+import toast from 'react-hot-toast';
 
 import Modal from './Modal';
 import Word from './Word';
 import { GAME_STATUS } from '../utils/constants';
-import { calculateTimeLeft } from '../utils/utils';
-import Link from 'next/link';
+import {
+  calculateTimeLeft,
+  getShareStatus,
+  getWordDictLink,
+  getWordOfTheDay,
+} from '../utils/utils';
 
 const Header = ({
   showHowModal,
@@ -94,8 +95,18 @@ const Header = ({
     setGuesses([...guesses]);
   }, [gameStats]);
 
-  const share = () =>
-    getShareStatus(boardState, evaluations, gameStatus, theme === 'dark');
+  const share = () => {
+    event({
+      action: 'Share results',
+      category: 'GAME_SHARE',
+    });
+    return getShareStatus(
+      boardState,
+      evaluations,
+      gameStatus,
+      theme === 'dark'
+    );
+  };
 
   const handleShare = () => {
     window?.navigator?.share({

@@ -1,4 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
+import { XIcon } from '@heroicons/react/outline';
+import toast, { Toaster } from 'react-hot-toast';
+import { event } from 'react-ga';
 
 import Header from '../component/Header';
 import Keyboard from '../component/Keyboard';
@@ -20,8 +23,6 @@ import {
   GAME_STATISTICS_KEY,
   GAME_STATUS,
 } from '../utils/constants';
-import toast, { Toaster } from 'react-hot-toast';
-import { XIcon } from '@heroicons/react/outline';
 
 // Initial values
 export const INIT_BOARD_STATE = ['', '', '', '', '', ''];
@@ -104,7 +105,16 @@ const Kuan = () => {
       } else if (keyCode === 13) {
         // ENTER KEY
         if (guess.length === INIT_BOARD_STATE.length - 1) {
+          event({
+            action: `Guess a word ${guess}`,
+            category: 'GUESS_WORD',
+          });
+
           if (isWordValid(guess)) {
+            event({
+              action: `Guess is valid ${guess}`,
+              category: 'GUESS_WORD_VALID',
+            });
             const evaluation = checkWord(guess);
             evaluations[rowIndex] = evaluation;
             boardState[rowIndex] = guess;
@@ -130,9 +140,18 @@ const Kuan = () => {
                 statistics.gamesWon++;
                 statistics.currentStreak++;
                 setRowIndex(rowIndex + 1);
+                event({
+                  action: 'Win a round',
+                  category: 'GAME_WIN',
+                  value: rowIndex + 1,
+                });
               } else {
                 statistics.currentStreak = 0;
                 statistics.guesses.fail++;
+                event({
+                  action: 'Lose a round',
+                  category: 'GAME_LOSE',
+                });
               }
 
               if (statistics.maxStreak < statistics.currentStreak) {
