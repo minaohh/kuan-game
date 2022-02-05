@@ -228,11 +228,14 @@ export const getShareStatus = (
 
   const ps = '#KanangKuan';
 
-  return (
-    `Kuan #${gameCount} ${
-      gameStatus === GAME_STATUS.WIN ? scoreWon : scoreLose
-    }` + `\n\n${resultsGrid}\n\n${ps}`
-  );
+  return `Kuan #${gameCount} ${
+    gameStatus === GAME_STATUS.WIN ? scoreWon : scoreLose
+  }
+    
+${resultsGrid}
+    
+${ps}
+https://kuan.vercel.app`;
 };
 
 // GAME STATUS workaround

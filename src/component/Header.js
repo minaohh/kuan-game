@@ -37,8 +37,9 @@ const Header = ({
   const [enabled, setEnabled] = useState(theme === 'dark');
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
   const [guesses, setGuesses] = useState([]);
-  const [copied, setCopied] = useState(false);
-  const [copiedText, setCopiedText] = useState('');
+  // const [copied, setCopied] = useState(false);
+  const showShareButton =
+    typeof window !== 'undefined' && !!window?.navigator?.share;
 
   const { boardState, evaluations, gameStatus } = gameState;
 
@@ -95,6 +96,13 @@ const Header = ({
 
   const share = () =>
     getShareStatus(boardState, evaluations, gameStatus, theme === 'dark');
+
+  const handleShare = () => {
+    window?.navigator?.share({
+      title: 'Kuan',
+      text: share(),
+    });
+  };
 
   return (
     <header className="flex items-center justify-between p-1 border-b">
@@ -302,15 +310,9 @@ const Header = ({
                 </h1>
               </div>
               <div className="">
-                <CopyToClipboard
-                  text={share()}
-                  onCopy={() => {
-                    setCopied(true);
-                    toast.success('Copied successfully!');
-                  }}
-                >
+                {showShareButton ? (
                   <button
-                    // onClick={share}
+                    onClick={handleShare}
                     className="inline-flex items-center px-5 m-2 text-white transition-colors duration-150 bg-green-600 rounded-lg h-14 focus:shadow-outline hover:bg-green-900"
                   >
                     <span className="text-xl font-semibold md:text-3xl">
@@ -318,7 +320,25 @@ const Header = ({
                     </span>
                     <ShareIcon className="w-5 h-5 ml-2 md:w-8 md:h-8" />
                   </button>
-                </CopyToClipboard>
+                ) : (
+                  <CopyToClipboard
+                    text={share()}
+                    onCopy={() => {
+                      // setCopied(true);
+                      toast.success('Copied successfully!');
+                    }}
+                  >
+                    <button
+                      // onClick={share}
+                      className="inline-flex items-center px-5 m-2 text-white transition-colors duration-150 bg-green-600 rounded-lg h-14 focus:shadow-outline hover:bg-green-900"
+                    >
+                      <span className="text-xl font-semibold md:text-3xl">
+                        SHARE
+                      </span>
+                      <ShareIcon className="w-5 h-5 ml-2 md:w-8 md:h-8" />
+                    </button>
+                  </CopyToClipboard>
+                )}
               </div>
             </div>
           )}
