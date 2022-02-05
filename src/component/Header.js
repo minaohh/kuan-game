@@ -426,7 +426,7 @@ const Header = ({
           <div className="flex flex-col items-center justify-center pt-4 text-center">
             <h1 className="space-x-3 text-4xl font-bold">
               <span>KUAN</span>
-              <small className="font-mono text-sm text-gray-400">v1.0.2</small>
+              <small className="font-mono text-sm text-gray-400">v1.0.3</small>
             </h1>
             <span className="pt-4 space-y-2 text-sm font-light text-left justify-items-start">
               <p>
