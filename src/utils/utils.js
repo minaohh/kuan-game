@@ -210,11 +210,11 @@ export const getShareStatus = (
         .map((row) => {
           switch (row) {
             case 'correct':
-              return '🟩';
+              return '💚';
             case 'present':
-              return '🟨';
+              return '💛';
             case 'absent':
-              return isDark ? '⬛️' : '⬜️';
+              return isDark ? '🖤' : '🤍';
           }
         })
         .join('');
