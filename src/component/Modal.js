@@ -1,5 +1,6 @@
 import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
+import { XIcon } from '@heroicons/react/outline';
 
 const Modal = ({ children, show, title, toggle }) => {
   return (
@@ -33,6 +34,12 @@ const Modal = ({ children, show, title, toggle }) => {
             leaveTo="opacity-0 scale-95"
           >
             <div className="relative inline-block p-10 my-10 space-y-5 overflow-hidden text-left align-middle transition-all transform bg-white rounded shadow-xl dark:bg-gray-800">
+              <button
+                className="absolute outline-none top-3 right-3"
+                onClick={toggle}
+              >
+                <XIcon className="w-6 h-6" />
+              </button>
               <Dialog.Title
                 as="h2"
                 className="pb-4 text-2xl font-bold leading-5 text-center"
