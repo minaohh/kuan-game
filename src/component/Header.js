@@ -15,6 +15,7 @@ import toast from 'react-hot-toast';
 
 import Modal from './Modal';
 import Word from './Word';
+import { useHighContrast } from '../provider/high-contrast';
 import { GAME_STATUS } from '../utils/constants';
 import {
   calculateTimeLeft,
@@ -34,6 +35,7 @@ const Header = ({
   gameState,
   wordOfTheDay = getWordOfTheDay(),
 }) => {
+  const { highContrastState, toggleHighContrast } = useHighContrast();
   const { theme, setTheme } = useTheme();
   const [enabled, setEnabled] = useState(theme === 'dark');
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
@@ -275,7 +277,9 @@ const Header = ({
                     className={`px-1 text-white ${
                       gameStatus === GAME_STATUS.WIN &&
                       gameState.rowIndex - 1 === index
-                        ? 'bg-green-600'
+                        ? highContrastState
+                          ? 'bg-orange-600'
+                          : 'bg-green-600'
                         : 'bg-gray-600'
                     }`}
                     style={{
@@ -324,7 +328,11 @@ const Header = ({
                 {showShareButton ? (
                   <button
                     onClick={handleShare}
-                    className="inline-flex items-center px-5 m-2 text-white transition-colors duration-150 bg-green-600 rounded-lg h-14 focus:shadow-outline hover:bg-green-900"
+                    className={`inline-flex items-center px-5 m-2 text-white transition-colors duration-150 rounded-lg h-14 focus:shadow-outline hover:bg-green-900 ${
+                      highContrastState
+                        ? 'bg-orange-600 hover:bg-orange-900'
+                        : 'bg-green-600 hover:bg-green-900'
+                    }`}
                   >
                     <span className="text-xl font-semibold md:text-3xl">
                       SHARE
@@ -341,7 +349,11 @@ const Header = ({
                   >
                     <button
                       // onClick={share}
-                      className="inline-flex items-center px-5 m-2 text-white transition-colors duration-150 bg-green-600 rounded-lg h-14 focus:shadow-outline hover:bg-green-900"
+                      className={`inline-flex items-center px-5 m-2 text-white transition-colors duration-150 rounded-lg h-14 focus:shadow-outline ${
+                        highContrastState
+                          ? 'bg-orange-600 hover:bg-orange-900'
+                          : 'bg-green-600 hover:bg-green-900'
+                      }`}
                     >
                       <span className="text-xl font-semibold md:text-3xl">
                         SHARE
@@ -368,13 +380,37 @@ const Header = ({
             <Switch
               checked={enabled}
               onChange={toggleTheme}
-              className={`${enabled ? 'bg-green-600' : 'bg-gray-800'}
+              className={`${
+                enabled
+                  ? highContrastState
+                    ? 'bg-orange-600'
+                    : 'bg-green-600'
+                  : 'bg-gray-800'
+              }
           relative inline-flex flex-shrink-0 h-6 w-14 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200`}
             >
               <span className="sr-only">Change Theme</span>
               <span
                 aria-hidden="true"
                 className={`${enabled ? 'translate-x-5' : 'translate-x-0'}
+            pointer-events-none inline-block h-5 w-8 rounded-full bg-white shadow-lg transform ring-0 transition ease-in-out duration-200`}
+              />
+            </Switch>
+          </div>
+          <div className="flex items-center justify-between">
+            <p>High Contrast</p>
+            <Switch
+              checked={highContrastState}
+              onChange={toggleHighContrast}
+              className={`${highContrastState ? 'bg-orange-600' : 'bg-gray-800'}
+          relative inline-flex flex-shrink-0 h-6 w-14 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200`}
+            >
+              <span className="sr-only">Change Theme</span>
+              <span
+                aria-hidden="true"
+                className={`${
+                  highContrastState ? 'translate-x-5' : 'translate-x-0'
+                }
             pointer-events-none inline-block h-5 w-8 rounded-full bg-white shadow-lg transform ring-0 transition ease-in-out duration-200`}
               />
             </Switch>
