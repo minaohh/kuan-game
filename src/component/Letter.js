@@ -1,9 +1,13 @@
 import { Transition } from '@headlessui/react';
 
+import { useHighContrast } from '../provider/high-contrast';
+
 const TransitionWrapper = ({ children, condition, wrapper }) =>
   condition ? wrapper(children) : children;
 
 const Letter = ({ children, evaluation }) => {
+  const { highContrastState } = useHighContrast();
+
   return (
     <TransitionWrapper
       condition={children !== ''}
@@ -35,11 +39,19 @@ const Letter = ({ children, evaluation }) => {
         className={[
           'flex items-center justify-center border-2 w-12 h-12 md:w-[65px] md:h-[65px] dark:text-white dark:border-gray-400',
           evaluation === 'present' &&
-            'bg-yellow-600 border-yellow-600 dark:border-yellow-600 text-white',
+            `${
+              highContrastState
+                ? 'bg-blue-400 border-blue-400 dark:border-blue-400'
+                : 'bg-yellow-600 border-yellow-600 dark:border-yellow-600'
+            } text-white`,
           evaluation === 'absent' &&
             'bg-gray-600 border-gray-600 dark:border-gray-600 text-white',
           evaluation === 'correct' &&
-            'bg-green-600 border-green-600 dark:border-green-600 text-white',
+            `${
+              highContrastState
+                ? 'bg-orange-600 border-orange-600 dark:border-orange-600'
+                : 'bg-green-600 border-green-600 dark:border-green-600'
+            } text-white`,
           evaluation === 'none' && 'text-black',
         ].join(' ')}
       >

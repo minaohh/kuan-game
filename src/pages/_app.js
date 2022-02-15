@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import ReactGA from 'react-ga';
 
 import '../styles/globals.css';
+import HighContrastProvider from '../provider/high-contrast';
 
 const App = ({ Component, pageProps }) => {
   const router = useRouter();
@@ -27,9 +28,11 @@ const App = ({ Component, pageProps }) => {
   }, [router.events]);
 
   return (
-    <ThemeProvider attribute="class">
-      <Component {...pageProps} />
-    </ThemeProvider>
+    <HighContrastProvider>
+      <ThemeProvider attribute="class">
+        <Component {...pageProps} />
+      </ThemeProvider>
+    </HighContrastProvider>
   );
 };
 
