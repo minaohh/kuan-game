@@ -191,6 +191,7 @@ export const getShareStatus = (
   evaluations,
   gameStatus,
   isDark,
+  isHighContrast,
   mode = GAME_MODE
 ) => {
   const wordToday = words[formatDate(new Date())];
@@ -210,11 +211,11 @@ export const getShareStatus = (
         .map((row) => {
           switch (row) {
             case 'correct':
-              return '💚';
+              return isHighContrast ? '🟧' : '🟩';
             case 'present':
-              return '💛';
+              return isHighContrast ? '🟦' : '🟨';
             case 'absent':
-              return isDark ? '🖤' : '🤍';
+              return isDark ? '⬛️' : '⬜️';
           }
         })
         .join('');
