@@ -285,6 +285,20 @@ const Kuan = () => {
     if (statistics !== null) {
       setStatistics({ ...statistics });
     }
+
+    const startDate = new Date('03/06/2022');
+    const dateNow = new Date();
+    const diffTime = Math.floor(
+      (dateNow.getTime() - startDate.getTime()) / (1000 * 3600 * 24)
+    );
+
+    if (diffTime <= 5) {
+      toast.loading('New updates. Refresh before playing.', {
+        position: 'top-center',
+        duration: 15000,
+        icon: '😁',
+      });
+    }
   }, []);
 
   return (
