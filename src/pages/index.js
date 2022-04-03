@@ -286,7 +286,7 @@ const Kuan = () => {
       setStatistics({ ...statistics });
     }
 
-    const startDate = new Date('03/06/2022');
+    const startDate = new Date('04/04/2022');
     const dateNow = new Date();
     const diffTime = Math.floor(
       (dateNow.getTime() - startDate.getTime()) / (1000 * 3600 * 24)
